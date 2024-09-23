@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Platform, StyleSheet } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Provider } from 'react-redux'
-import { colors } from '../constants/tokens'
-import store from '../utils/store'
+import { colors } from './src/constants/tokens'
+import store from './src/utils/store'
+import Navigation from './StackNavigator'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -21,7 +21,7 @@ const App = () => {
 			<QueryClientProvider client={queryClient}>
 				<SafeAreaView style={styles.droidSafeArea}>
 					<SafeAreaProvider>
-						<RootNavigation />
+						<Navigation />
 						<StatusBar style="auto" />
 					</SafeAreaProvider>
 				</SafeAreaView>
@@ -30,13 +30,13 @@ const App = () => {
 	)
 }
 
-const RootNavigation = () => {
-	return (
-		<Stack>
-			<Stack.Screen name="(tabs)" options={{ headerShown: false }} /> /
-		</Stack>
-	)
-}
+// const RootNavigation = () => {
+// 	return (
+// 		<Stack>
+// 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} /> /
+// 		</Stack>
+// 	)
+// }
 
 const styles = StyleSheet.create({
 	droidSafeArea: {
