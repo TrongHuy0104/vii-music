@@ -10,7 +10,7 @@ export default function Header({ title }) {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>{title}</Text>
-			<Pressable onPress={() => navigation.navigate('Search')}>
+			<Pressable onPress={() => navigation.navigate('SongList')}>
 				<Ionicons name="search" size={28} color={colors.white} />
 			</Pressable>
 		</View>

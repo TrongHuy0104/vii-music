@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SearchScreen from '../SearchScreen'
 import HomeScreen from './HomeScreen'
+import SongListScreen from './SongListScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,6 +22,13 @@ export default function HomeStack() {
 			<Stack.Screen
 				name="Search"
 				component={SearchScreen}
+				options={{
+					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name="SongList"
+				component={SongListScreen}
 				options={{
 					headerShown: false,
 				}}
