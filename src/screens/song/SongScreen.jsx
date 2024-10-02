@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import Header from '../../components/Header'
+import Heading from '../../components/Heading'
 import { defaultStyles } from '../../styles'
 
 export default function SongScreen() {
 	return (
 		<View style={defaultStyles.container}>
-			<Header title="Bài hát" />
+			<Heading title="Bài hát" />
 		</View>
 	)
 }

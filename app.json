@@ -22,9 +22,10 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.svg",
+				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#151521"
-			}
+			},
+			"package": "com.music.player"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

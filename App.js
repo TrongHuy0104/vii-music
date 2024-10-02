@@ -30,19 +30,11 @@ const App = () => {
 	)
 }
 
-// const RootNavigation = () => {
-// 	return (
-// 		<Stack>
-// 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} /> /
-// 		</Stack>
-// 	)
-// }
-
 const styles = StyleSheet.create({
 	droidSafeArea: {
 		flex: 1,
 		backgroundColor: `${colors.background}`,
-		paddingTop: Platform.OS === 'android' ? 0 : 0,
+		paddingTop: Platform.OS === 'android' ? 15 : 0,
 	},
 })
 
