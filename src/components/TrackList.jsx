@@ -1,5 +1,7 @@
 import React from 'react'
 import { FlatList, View } from 'react-native'
+import TrackPlayer from 'react-native-track-player'
+import { getSongAudio } from '../api'
 import { utilsStyles } from '../styles'
 import TrackListItem from './TrackListItem'
 
@@ -117,13 +119,22 @@ export default function TrackList({ scrollEnabled, songs }) {
 	// 	},
 	// ]
 
+	const handleTrackSelect = async (track) => {
+		const audio = await getSongAudio(track.encodeId)
+		console.log(audio)
+
+		await TrackPlayer.load(track)
+	}
+
 	return (
 		<FlatList
 			scrollEnabled={scrollEnabled}
 			data={songs}
 			ItemSeparatorComponent={ItemDivider}
 			ListFooterComponent={ItemDivider}
-			renderItem={({ item: track }) => <TrackListItem track={track} />}
+			renderItem={({ item: track }) => (
+				<TrackListItem track={track} onTrackSelect={handleTrackSelect} />
+			)}
 			keyExtractor={(item) => item.encodeId}
 			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
 		/>

@@ -5,11 +5,11 @@ import { unknownTrackImageUri } from '../constants/images'
 import { colors, fontSize } from '../constants/tokens'
 import { defaultStyles } from '../styles'
 
-export default function TrackListItem({ track }) {
+export default function TrackListItem({ track, onTrackSelect: handleTrackSelect }) {
 	const { title, thumbnailM, artistsNames } = track
 	const isActiveTrack = false
 	return (
-		<TouchableHighlight>
+		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
 			<View style={styles.trackItemContainer}>
 				{/* Track thumb */}
 				<View>
