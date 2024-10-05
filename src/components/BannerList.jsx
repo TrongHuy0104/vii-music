@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, FlatList, Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useBanners from '../services/home/useBanners'
 
 const { width: viewportWidth } = Dimensions.get('window')
@@ -11,7 +11,6 @@ const BannerList = ({ navigation }) => {
 		navigation.navigate('playlist', { encodeId })
 	}
 
-	console.log('API Response:', banners)
 	return (
 		<View>
 			<FlatList
@@ -37,14 +36,14 @@ const BannerList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	bannerContainer: {
-		marginHorizontal: 7.8, // Khoảng cách giữa các banner
+		marginHorizontal: 7.8,
 		alignItems: 'center',
-		justifyContent: 'center', // Bo góc
-		overflow: 'hidden', // Ẩn phần hình ảnh bị vượt ra ngoài góc bo tròn
+		justifyContent: 'center',
+		overflow: 'hidden',
 	},
 	bannerImage: {
-		width: 300, // Ảnh rộng 100% của container
-		height: 150, // Chiều cao banner
+		width: 300,
+		height: 150,
 		borderRadius: 10,
 	},
 	bannerTitle: {
