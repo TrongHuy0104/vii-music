@@ -20,8 +20,9 @@ export const fontSize = {
 
 export const fontWeight = {
 	bold: '700',
+	medium: '̉00',
 }
 
 export const screenPadding = {
-	horizontal: 24,
+	horizontal: 12,
 }

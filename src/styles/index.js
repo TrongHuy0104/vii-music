@@ -5,6 +5,7 @@ export const defaultStyles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: colors.background,
+		paddingHorizontal: 8,
 	},
 	text: {
 		fontSize: fontSize.base,
@@ -12,4 +13,10 @@ export const defaultStyles = StyleSheet.create({
 	},
 })
 
-export const utilsStyles = StyleSheet.create({})
+export const utilsStyles = StyleSheet.create({
+	itemSeparator: {
+		borderColor: colors.textMuted,
+		borderWidth: StyleSheet.hairlineWidth,
+		opacity: 0.3,
+	},
+})
