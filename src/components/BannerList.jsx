@@ -1,8 +1,6 @@
 import React from 'react'
-import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from '../constants/tokens'
-
-const { width: viewportWidth } = Dimensions.get('window')
 
 const BannerList = ({ navigation, banners }) => {
 	const handleBannerPress = (encodeId) => {
@@ -15,7 +13,7 @@ const BannerList = ({ navigation, banners }) => {
 			<FlatList
 				data={banners}
 				renderItem={({ item }) => (
-					<TouchableOpacity onPress={() => handleBannerPress(item.encodeId)}>
+					<TouchableOpacity activeOpacity={0.8} onPress={() => handleBannerPress(item.encodeId)}>
 						<View style={styles.bannerContainer}>
 							{item.banner ? (
 								<Image source={{ uri: item.banner }} style={styles.bannerImage} />
