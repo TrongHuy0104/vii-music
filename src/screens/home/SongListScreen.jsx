@@ -8,8 +8,10 @@ import useDetailPlaylist from '../../services/home/useDetailPlaylist'
 import { defaultStyles } from '../../styles'
 import { getInPremiumSongs, getInPremiumSongsDuration } from '../../utils/helpers'
 
-export default function SongListScreen() {
-	const { isLoadingPlaylist, playlists } = useDetailPlaylist()
+export default function SongListScreen({ route }) {
+	const { encodeId } = route.params
+
+	const { isLoadingPlaylist, playlists } = useDetailPlaylist(encodeId)
 
 	if (isLoadingPlaylist)
 		return (

@@ -24,7 +24,7 @@ export default function HomeScreen() {
 		<View style={defaultStyles.container}>
 			<Header title="Trang chủ" />
 			<BannerList navigation={navigation} banners={banners} />
-			<HomeTabPlaylist playlists={playlists} />
+			<HomeTabPlaylist navigation={navigation} playlists={playlists} />
 		</View>
 	)
 }
