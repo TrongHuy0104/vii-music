@@ -8,7 +8,9 @@ function useHome() {
 	})
 	const banners = data?.data?.data?.items?.find((item) => item.sectionType === 'banner')?.items
 
-	return { isLoading, banners }
+	const playlists = data?.data?.data?.items?.filter((item) => item.sectionType === 'playlist') || []
+
+	return { isLoading, banners, playlists }
 }
 
 export default useHome

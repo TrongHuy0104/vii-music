@@ -6,16 +6,17 @@ import Header from '../../components/Header'
 import useHome from '../../services/home/useHome'
 import { defaultStyles } from '../../styles'
 
+import { colors } from '../../constants/tokens'
 import HomeTabPlaylist from './HomeTabPlaylist'
 
 export default function HomeScreen() {
-	const { isLoading, banners } = useHome()
+	const { isLoading, banners, playlists } = useHome()
 	const navigation = useNavigation() // Access navigation object
 
 	if (isLoading)
 		return (
-			<View>
-				<Text>Loading...</Text>
+			<View style={defaultStyles.container}>
+				<Text style={{ color: colors.text }}>Loading...</Text>
 			</View>
 		)
 
@@ -23,7 +24,7 @@ export default function HomeScreen() {
 		<View style={defaultStyles.container}>
 			<Header title="Trang chủ" />
 			<BannerList navigation={navigation} banners={banners} />
-			<HomeTabPlaylist />
+			<HomeTabPlaylist playlists={playlists} />
 		</View>
 	)
 }
