@@ -7,3 +7,12 @@ export async function getHome() {
 	if (!data.statusText === 'OK') throw Error('Failed getting home data')
 	return data
 }
+
+export async function getDetailPlaylist(pId) {
+	const data = await axios.get('/detailplaylist', {
+		params: { id: pId },
+		method: 'get',
+	})
+	if (!data.statusText === 'OK') throw Error('Failed getting playlist data')
+	return data
+}
