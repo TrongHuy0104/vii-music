@@ -8,13 +8,11 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
-import usePlaylist from '../../services/home/usePlaylist'
 import HomePlaylist from './HomePlaylist'
 
 const { width } = Dimensions.get('window')
 
-const HomeTabPlaylist = () => {
-	const { isLoadingPlaylist, playlists = [] } = usePlaylist()
+const HomeTabPlaylist = ({ playlists }) => {
 	const [activeTab, setActiveTab] = useState(playlists.length > 0 ? playlists[0].title : '')
 	const activePlaylist = playlists.find((playlist) => playlist.title === activeTab)
 
@@ -23,7 +21,7 @@ const HomeTabPlaylist = () => {
 		if (playlists.length > 0 && !activeTab) {
 			setActiveTab(playlists[0].title)
 		}
-	}, [playlists])
+	}, [playlists, activeTab])
 
 	return (
 		<View style={styles.container}>
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
 	},
 	playlistContainer: {
 		flex: 2,
-		paddingLeft: 7,
+		paddingLeft: 0,
 	},
 	flatListContent: {},
 	itemContainer: {
