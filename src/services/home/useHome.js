@@ -14,7 +14,12 @@ function useHome() {
 	const newrealeases =
 		data?.data?.data?.items?.find((item) => item.sectionType === 'new-release')?.items?.all || []
 
-	return { isLoading, banners, playlists, newrealeases }
+	const newReleaseSection = data?.data?.data?.items?.find(
+		(item) => item.sectionType === 'new-release',
+	)
+	const newReleaseTitle = newReleaseSection?.title || 'a'
+
+	return { isLoading, banners, playlists, newrealeases, newReleaseTitle }
 }
 
 export default useHome

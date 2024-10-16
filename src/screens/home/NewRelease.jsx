@@ -4,21 +4,28 @@ import { colors, fontSize } from '../../constants/tokens'
 import useHome from '../../services/home/useHome'
 
 const NewRelease = ({ navigation, newreleases }) => {
-	const { isLoading, newrealeases } = useHome()
+	const { isLoading, newrealeases, newReleaseTitle } = useHome()
 	const [showAll, setShowAll] = useState(false)
 	const [filter, setFilter] = useState('all')
 	const handleNewReleaseList = () => {
-		navigation.navigate('NewReleaseList', { newreleases }) // Pass new releases data
+		navigation.navigate('NewReleaseList', { newreleases })
 	}
 
 	if (isLoading) {
 		return <Text>Loading...</Text>
 	}
 
+	const vietnamGenres = ['IWZ9Z08I', 'IWZ97FCD'] // genreIds for Viet Nam
+	const internationalGenres = ['IWZ9Z08O', 'IWZ9Z097'] // genreIds for international
+
 	const filteredReleases = newrealeases.filter((item) => {
 		if (filter === 'all') return true
-		if (filter === 'vietnam') return item.country !== 'VN'
-		if (filter === 'international') return item.country === 'VN'
+		if (filter === 'vietnam') {
+			return item.genreIds.some((genre) => vietnamGenres.includes(genre))
+		}
+		if (filter === 'international') {
+			return item.genreIds.some((genre) => internationalGenres.includes(genre))
+		}
 		return true
 	})
 
@@ -49,9 +56,9 @@ const NewRelease = ({ navigation, newreleases }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.headerContainer}>
-				<Text style={styles.header}>Mới phát hành</Text>
+				<Text style={styles.header}>{newReleaseTitle}</Text>
 				<TouchableOpacity onPress={(item) => handleNewReleaseList(item.encodeId)}>
-					<Text style={styles.seeMore}>{showAll ? '<' : '>'}</Text>
+					<Text style={styles.seeMore}>Xem thêm ></Text>
 				</TouchableOpacity>
 			</View>
 
@@ -100,7 +107,8 @@ const styles = StyleSheet.create({
 	headerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 10,
+		marginBottom: 15,
+		justifyContent: 'space-between',
 	},
 	header: {
 		fontSize: fontSize.base,
@@ -110,6 +118,9 @@ const styles = StyleSheet.create({
 		fontSize: fontSize.base,
 		marginLeft: 15,
 		color: colors.text,
+		right: 0,
+		top: 0,
+		paddingRight: 5,
 	},
 	filterContainer: {
 		flexDirection: 'row',
@@ -121,7 +132,6 @@ const styles = StyleSheet.create({
 	},
 	activeFilter: {
 		color: '#33CCFF',
-		fontWeight: 'bold',
 	},
 	row: {
 		marginBottom: 5,
@@ -136,13 +146,13 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		marginRight: 10,
 		height: 70,
-		width: 'auto',
+		maxWidth: 'auto',
 	},
 	albumCover: {
 		width: 60,
 		height: 60,
 		borderRadius: 8,
-		marginRight: 5,
+		marginRight: 15,
 	},
 	infoContainer: {
 		flex: 1,
@@ -151,12 +161,12 @@ const styles = StyleSheet.create({
 		fontSize: fontSize.base,
 		fontWeight: 'bold',
 		color: colors.text,
-		maxWidth: '50%',
+		maxWidth: 200,
 	},
 	artist: {
 		fontSize: fontSize.base,
 		color: 'gray',
-		maxWidth: '80%',
+		maxWidth: 200,
 	},
 })
 
