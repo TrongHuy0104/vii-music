@@ -8,7 +8,7 @@ import { colors, fontSize } from './src/constants/tokens'
 import HomeStack from './src/screens/home/HomeStack'
 import PlaylistStack from './src/screens/playlist/PlaylistStack'
 import SongStack from './src/screens/song/SongStack'
-import UserScreen from './src/screens/user/UserScreen'
+import UserStack from './src/screens/user/UserStack'
 
 const Tab = createBottomTabNavigator()
 
@@ -78,7 +78,7 @@ function BottomTabs() {
 			/>
 			<Tab.Screen
 				name="user"
-				component={UserScreen}
+				component={UserStack}
 				options={{
 					title: 'Cá nhân',
 					tabBarIcon: ({ color }) => <FontAwesome6 name="user" size={20} color={color} />,

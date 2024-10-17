@@ -1,87 +1,171 @@
-import React, { useState } from 'react'
-// import { StyleSheet, View } from 'react-native'
+// import React, { useState } from 'react'
+// // import { StyleSheet, View } from 'react-native'
+// import { defaultStyles } from '../styles/index'
+
+// import { useNavigation } from '@react-navigation/native'
+// import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+
+// import unknowImage from '../../assets/unknown_artist.png'
+
+// export default function Profile() {
+// 	const navigation = useNavigation()
+
+// 	const [name, setName] = useState('Vikashini Vinie') // Tên người dùng hiện tại
+// 	const [email, setEmail] = useState('vikashini@example.com') // Email người dùng hiện tại
+// 	const [language, setLanguage] = useState('English') // Ngôn ngữ người dùng hiện tại
+
+// 	const navigateToEdit = () => {
+// 		// navigation.navigate('EditProfileScreen', { name, email, language })
+// 		navigation.navigate('user', {
+// 			screen: 'EditProfileScreen',
+// 			params: { name, email, language },
+// 		})
+// 	}
+
+// 	return (
+// 		<View style={defaultStyles.container}>
+// 			<ScrollView contentContainerStyle={styles.container}>
+// 				{/* Profile Image and Name */}
+// 				<View style={styles.profileSection}>
+// 					<Image
+// 						source={unknowImage} // Replace with your profile image link
+// 						style={styles.profileImage}
+// 					/>
+// 					<Text style={styles.profileName}>{name}</Text>
+// 				</View>
+// 				<Button
+// 					title="Edit"
+// 					onPress={() => navigation.navigate('EditProfileScreen', { name, email, language })} // Điều hướng tới trang EditProfileScreen
+// 				/>
+
+// 				<Text style={styles.sectionHeader}>Personal Information</Text>
+// 				<View style={styles.content}>
+// 					<Text style={styles.infoText}>{name} </Text>
+// 					<Text style={styles.infoText}>abv@gmail.com</Text>
+// 					<Text style={styles.infoText}>English</Text>
+// 				</View>
+
+// 				{/* About Section
+// 				<View style={styles.infoSection}>
+// 					<Text style={styles.sectionHeader}>About</Text>
+// 					<View style={styles.content}>
+// 						<Text style={styles.infoText}>Privacy</Text>
+// 						<Text style={styles.infoText}>Storage</Text>
+// 						<Text style={styles.infoText}>Audio Quality</Text>
+// 					</View>
+// 				</View> */}
+// 			</ScrollView>
+// 		</View>
+// 	)
+// }
+
+// const styles = StyleSheet.create({
+// 	container: {
+// 		flexGrow: 1,
+// 		padding: 20,
+// 	},
+// 	profileSection: {
+// 		alignItems: 'center',
+// 		marginBottom: 50,
+// 	},
+// 	profileImage: {
+// 		width: 100,
+// 		height: 100,
+// 		borderRadius: 50,
+// 		marginBottom: 20,
+// 	},
+// 	profileName: {
+// 		color: '#fff', // White text for name
+// 		fontSize: 25,
+// 		fontWeight: 'bold',
+// 	},
+// 	infoSection: {
+// 		marginBottom: 100,
+// 	},
+// 	sectionHeader: {
+// 		color: '#fff', // White header
+// 		fontSize: 20,
+// 		fontWeight: 'bold',
+// 		marginBottom: 15,
+// 		paddingBottom: 10,
+// 		paddingTop: 20,
+// 	},
+// 	infoText: {
+// 		color: '#fff', // White text for list items
+// 		fontSize: 18,
+// 		padding: 10,
+// 		borderBottomColor: '#555',
+// 		borderBottomWidth: 1,
+// 		paddingVertical: 15,
+// 	},
+// 	content: {
+// 		paddingBottom: 30,
+// 	},
+// })
+
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native' // Thêm useRoute để nhận tham số
+import React, { useEffect, useState } from 'react'
+import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { defaultStyles } from '../styles/index'
 
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons' // Thêm import từ react-native-vector-icons
-
 import unknowImage from '../../assets/unknown_artist.png'
-import ModalEdit from './ModalEdit'
 
 export default function Profile() {
-	// const navigation = useNavigation()
+	const navigation = useNavigation()
+	const isFocused = useIsFocused() // Check if the screen is focused
+	const route = useRoute() // Lấy params từ navigation
 
-	const [modalVisible, setModalVisible] = useState(false) // Quản lý trạng thái modal
-	const [name, setName] = useState('Vikashini Vini') // Tên người dùng hiện tại
-	const [newName, setNewName] = useState('') // Giá trị nhập vào trong modal
+	// Default user information
+	const [name, setName] = useState('Vikashini Vini')
+	const [email, setEmail] = useState('vikashini@example.com')
+	const [language, setLanguage] = useState('English')
+	const [avatar, setAvatar] = useState(unknowImage)
 
-	// Open Modal
-	const openModal = () => {
-		setNewName(name) // Cập nhật giá trị mới của name để hiển thị trong TextInput
-		setModalVisible(true)
-	}
+	// Update user information when coming back to the Profile screen
+	useEffect(() => {
+		if (isFocused && route.params) {
+			// Kiểm tra nếu có params được truyền từ EditProfileScreen
+			console.log('dsadasd', route.params)
+			console.log('dsadasddd', isFocused)
 
-	// Hàm lưu tên mới và đóng modal
-	const saveName = () => {
-		setName(newName) // Cập nhật tên mới
-		setModalVisible(false) // Đóng modal
-	}
+			const { updatedName, updatedEmail, updatedLanguage, updatedAvatar } = route.params
 
-	// Bạn có thể thực hiện lưu tên mới vào cơ sở dữ liệu tại đây
+			// Cập nhật state nếu có giá trị mới được truyền về
+			if (updatedName) setName(updatedName)
+			if (updatedEmail) setEmail(updatedEmail)
+			if (updatedLanguage) setLanguage(updatedLanguage)
+			if (updatedAvatar) setAvatar(updatedAvatar)
+		}
+	}, [isFocused, route.params]) // Theo dõi khi trang được focus và có params
+
 	return (
 		<View style={defaultStyles.container}>
 			<ScrollView contentContainerStyle={styles.container}>
 				{/* Profile Image and Name */}
 				<View style={styles.profileSection}>
-					<Image
-						source={unknowImage} // Replace with your profile image link
-						style={styles.profileImage}
-					/>
-					<Text style={styles.profileName}>Vikashini Vini</Text>
+					<Image source={avatar} style={styles.profileImage} />
+					<Text style={styles.profileName}>{name}</Text>
 				</View>
 
-				{/* Personal Information Section */}
-				<View style={styles.infoSection}>
-					<Text style={styles.sectionHeader}>Personal Information</Text>
-					<TouchableOpacity style={styles.infoItem} onPress={openModal}>
-						<Text style={styles.infoText}>Name</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.infoItem} onPress={openModal}>
-						<Text style={styles.infoText}>Email</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.infoItem} onPress={openModal}>
-						<Text style={styles.infoText}>Language</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
-				</View>
-
-				<ModalEdit
-					visible={modalVisible}
-					onClose={() => setModalVisible(false)}
-					onSave={saveName}
-					value={newName}
-					onChangeValue={setNewName}
-					title="Edit Name"
-					placeholder="Enter new name"
+				{/* Edit Button */}
+				<Button
+					title="Edit"
+					onPress={() =>
+						navigation.navigate('EditProfileScreen', {
+							name,
+							email,
+							language,
+							avatar: avatar ? String(avatar) : null,
+						})
+					}
 				/>
 
-				{/* About Section */}
-				<View style={styles.infoSection}>
-					<Text style={styles.sectionHeader}>About</Text>
-					<TouchableOpacity style={styles.infoItem}>
-						<Text style={styles.infoText}>Privacy</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.infoItem}>
-						<Text style={styles.infoText}>Storage</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.infoItem}>
-						<Text style={styles.infoText}>Audio Quality</Text>
-						<Icon name="chevron-forward-outline" size={20} color="#fff" />
-					</TouchableOpacity>
+				{/* Personal Information */}
+				<Text style={styles.sectionHeader}>Personal Information</Text>
+				<View style={styles.content}>
+					<Text style={styles.infoText}>{name}</Text>
+					<Text style={styles.infoText}>{email}</Text>
+					<Text style={styles.infoText}>{language}</Text>
 				</View>
 			</ScrollView>
 		</View>
@@ -91,7 +175,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
 	container: {
 		flexGrow: 1,
-		padding: 30,
+		padding: 20,
 	},
 	profileSection: {
 		alignItems: 'center',
@@ -108,25 +192,23 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		fontWeight: 'bold',
 	},
-	infoSection: {
-		marginBottom: 50,
-	},
 	sectionHeader: {
 		color: '#fff', // White header
 		fontSize: 20,
 		fontWeight: 'bold',
-		marginBottom: 20,
-	},
-	infoItem: {
-		flexDirection: 'row', // Đặt icon và text cạnh nhau
-		justifyContent: 'space-between', // Đặt text bên trái và icon bên phải
-		alignItems: 'center',
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: '#555', // Gray underline like in the image
+		marginBottom: 15,
+		paddingBottom: 10,
+		paddingTop: 20,
 	},
 	infoText: {
 		color: '#fff', // White text for list items
 		fontSize: 18,
+		padding: 10,
+		borderBottomColor: '#555',
+		borderBottomWidth: 1,
+		paddingVertical: 15,
+	},
+	content: {
+		paddingBottom: 30,
 	},
 })

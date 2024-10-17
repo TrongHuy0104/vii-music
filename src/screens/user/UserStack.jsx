@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SearchScreen from '../SearchScreen'
-import EditNameScreen from './EditNameScreen'
+import EditProfileScreen from './EditProfileScreen'
 import UserScreen from './UserScreen'
-
 const Stack = createNativeStackNavigator()
 
 export default function UserStack() {
@@ -26,9 +25,10 @@ export default function UserStack() {
 					headerShown: false,
 				}}
 			/>
+
 			<Stack.Screen
-				name="EditName"
-				component={EditNameScreen}
+				name="EditProfileScreen"
+				component={EditProfileScreen}
 				options={{
 					headerShown: false,
 				}}
