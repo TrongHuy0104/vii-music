@@ -125,8 +125,6 @@ export default function Profile() {
 	useEffect(() => {
 		if (isFocused && route.params) {
 			// Kiểm tra nếu có params được truyền từ EditProfileScreen
-			console.log('dsadasd', route.params)
-			console.log('dsadasddd', isFocused)
 
 			const { updatedName, updatedEmail, updatedLanguage, updatedAvatar } = route.params
 

@@ -12,7 +12,6 @@ export default function UserScreen() {
 		<View style={defaultStyles.container}>
 			<Header title="Cá nhân" />
 			<Profile navigation={navigation} />
-			{/* <EditProfileView /> */}
 		</View>
 	)
 }

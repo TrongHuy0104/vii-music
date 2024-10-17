@@ -20,8 +20,6 @@ const EditProfileScreen = () => {
 	const [email, setEmail] = useState(route.params.email)
 	const [language, setLanguage] = useState(route.params.language)
 	const [avatar, setAvatar] = useState(route.params.avatar ? String(route.params.avatar) : null)
-	console.log('avaa: ', avatar)
-	console.log('avaa: ', language)
 
 	// Hàm chọn ảnh từ thư viện
 	const chooseImage = () => {
@@ -36,19 +34,19 @@ const EditProfileScreen = () => {
 				console.log('ImagePicker Error: ', response.errorMessage)
 			} else if (response.assets && response.assets.length > 0) {
 				const selectedImage = response.assets[0]
-				setAvatar(selectedImage.uri) // Cập nhật URI ảnh
-				uploadImage(selectedImage) // Upload ảnh
+				setAvatar(selectedImage.uri) // update uri image
+				uploadImage(selectedImage) // Upload image
 			}
 		})
 	}
 
-	// Hàm upload ảnh lên server
+	//  upload image to server
 	const uploadImage = async (image) => {
 		const formData = new FormData()
 		formData.append('file', {
 			uri: image.uri,
-			name: image.fileName || 'avatar.jpg', // Đặt tên file ảnh
-			type: image.type || 'image/jpeg', // Đặt loại file
+			name: image.fileName || 'avatar.jpg',
+			type: image.type || 'image/jpeg',
 		})
 
 		try {
@@ -58,19 +56,19 @@ const EditProfileScreen = () => {
 				},
 			})
 			console.log('Upload thành công: ', response.data)
-			setAvatar(`https://test-profile-mma.onrender.com/${response.data.filePath}`) // Cập nhật URL ảnh mới từ server
+			setAvatar(`https://test-profile-mma.onrender.com/${response.data.filePath}`) // update URL new image  from server
 		} catch (error) {
 			console.log('Lỗi upload: ', error)
 		}
 	}
 
-	// Hàm submit dữ liệu
+	//  submit data
 	const handleSubmit = () => {
 		navigation.navigate('User', {
 			updatedName: name,
 			updatedEmail: email,
 			updatedLanguage: language,
-			updatedAvatar: avatar, // Gửi avatar mới sau khi upload
+			updatedAvatar: avatar,
 		})
 	}
 
@@ -83,10 +81,7 @@ const EditProfileScreen = () => {
 						// source={avatar ? { uri: avatar } : require('../../../assets/unknown_artist.png')}
 						source={avatar}
 					/>
-					<TouchableOpacity
-						style={styles.changeAvatarButton}
-						onPress={chooseImage} // Gọi hàm chọn ảnh
-					>
+					<TouchableOpacity style={styles.changeAvatarButton} onPress={chooseImage}>
 						<Text style={styles.changeAvatarButtonText}>Change Avatar</Text>
 					</TouchableOpacity>
 				</View>
@@ -115,10 +110,7 @@ const EditProfileScreen = () => {
 						onChangeText={setLanguage}
 						placeholderTextColor="#aaa"
 					/>
-					<TouchableOpacity
-						style={styles.button}
-						onPress={handleSubmit} // Gọi hàm submit
-					>
+					<TouchableOpacity style={styles.button} onPress={handleSubmit}>
 						<Text style={styles.buttonText}>Submit</Text>
 					</TouchableOpacity>
 				</View>
