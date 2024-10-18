@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
 import Toast from 'react-native-toast-message'
 import { signUp as signUpApi } from '../../api/apiAuth'
 
 function useSignUp() {
+	const navigation = useNavigation()
 	const { mutate: signUp, isPending: isLoading } = useMutation({
 		mutationFn: signUpApi,
 		onSuccess: () => {
@@ -10,6 +12,7 @@ function useSignUp() {
 				type: 'success',
 				text1: 'Tạo thành công! Vui lòng đăng nhập lại!',
 			})
+			navigation.navigate('Login')
 		},
 		onError: (err) => {
 			console.error('err', err.message)
