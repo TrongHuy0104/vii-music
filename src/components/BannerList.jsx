@@ -5,7 +5,7 @@ import { colors } from '../constants/tokens'
 const BannerList = ({ navigation, banners }) => {
 	const handleBannerPress = (encodeId) => {
 		// Navigate to Playlist screen, passing the encodeId
-		navigation.navigate('playlist', { encodeId })
+		navigation.navigate('SongList', { encodeId })
 	}
 
 	return (

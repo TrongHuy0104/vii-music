@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDetailPlaylist } from '../../api'
 
-function useDetailPlaylist() {
+function useDetailPlaylist(encodeId) {
 	const { isPending: isLoadingPlaylist, data } = useQuery({
 		queryKey: ['playlist'],
-		queryFn: () => getDetailPlaylist('67WIO6CF'),
+		queryFn: () => getDetailPlaylist(encodeId),
+		// cacheTime: 0,
 	})
 	const playlists = data?.data?.data
 

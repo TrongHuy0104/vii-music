@@ -12,7 +12,7 @@ import HomePlaylist from './HomePlaylist'
 
 const { width } = Dimensions.get('window')
 
-const HomeTabPlaylist = ({ playlists }) => {
+const HomeTabPlaylist = ({ navigation, playlists }) => {
 	const [activeTab, setActiveTab] = useState(playlists.length > 0 ? playlists[0].title : '')
 	const activePlaylist = playlists.find((playlist) => playlist.title === activeTab)
 
@@ -22,6 +22,11 @@ const HomeTabPlaylist = ({ playlists }) => {
 			setActiveTab(playlists[0].title)
 		}
 	}, [playlists, activeTab])
+
+	const handlePlaylistPress = (encodeId) => {
+		// Navigate to Playlist screen, passing the encodeId
+		navigation.navigate('SongList', { encodeId })
+	}
 
 	return (
 		<View style={styles.container}>
@@ -58,9 +63,7 @@ const HomeTabPlaylist = ({ playlists }) => {
 							<View style={styles.itemContainer}>
 								<HomePlaylist
 									playlistItem={item}
-									onPress={() => {
-										/* Handle item click */
-									}}
+									onPress={() => handlePlaylistPress(item.encodeId)}
 								/>
 							</View>
 						)}
