@@ -13,7 +13,7 @@ import PlayerScreen from './src/screens/PlayerScreen'
 import PlaylistStack from './src/screens/playlist/PlaylistStack'
 import RegisterScreen from './src/screens/RegisterScreen'
 import SongStack from './src/screens/song/SongStack'
-import UserScreen from './src/screens/user/UserScreen'
+import UserStack from './src/screens/user/UserStack'
 import { useAuth } from './src/services/auth/useAuth'
 import { navigationRef } from './src/utils/rootNavigation'
 
@@ -96,7 +96,7 @@ function BottomTabs() {
 				/>
 				<Tab.Screen
 					name="user"
-					component={UserScreen}
+					component={UserStack}
 					options={{
 						title: 'Cá nhân',
 						tabBarIcon: ({ color }) => <FontAwesome6 name="user" size={20} color={color} />,
@@ -144,6 +144,15 @@ function Navigation() {
 							component={() => (
 								<SafeAreaWrapper>
 									<BottomTabs />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="Login"
+							component={() => (
+								<SafeAreaWrapper safeArea={false}>
+									<LoginScreen />
 								</SafeAreaWrapper>
 							)}
 							options={{ headerShown: false }}
