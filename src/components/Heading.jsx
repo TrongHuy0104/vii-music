@@ -6,7 +6,7 @@ import { useGoBack } from '../hooks/useGoBack'
 const BackButton = () => {
 	const goBack = useGoBack()
 	return (
-		<TouchableOpacity onPress={goBack}>
+		<TouchableOpacity onPress={goBack} style={styles.backButton}>
 			<View>
 				<MaterialCommunityIcons name="arrow-left" size={24} color={colors.white} />
 			</View>
@@ -17,7 +17,7 @@ const Heading = ({ title }) => {
 	return (
 		<View style={styles.container}>
 			<BackButton />
-			<Text style={styles.headingTitle}>{title}</Text>
+			{title && <Text style={styles.headingTitle}>{title}</Text>}
 		</View>
 	)
 }
@@ -26,12 +26,20 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingBottom: 8,
+		justifyContent: 'center',
+		paddingVertical: 8,
+		backgroundColor: 'transparent',
+	},
+
+	backButton: {
+		position: 'absolute',
+		top: 8,
+		left: 0,
 	},
 
 	headingTitle: {
 		color: colors.white,
-		fontSize: fontSize.xl,
+		fontSize: fontSize.lg,
 		fontWeight: fontWeight.bold,
 		marginHorizontal: 12,
 	},

@@ -1,15 +1,16 @@
 import { Image } from 'expo-image'
 import React from 'react'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { useActiveTrack } from 'react-native-track-player'
 import { unknownTrackImageUri } from '../constants/images'
 import { colors, fontSize } from '../constants/tokens'
 import { defaultStyles } from '../styles'
 
-export default function TrackListItem({ track }) {
+export default function TrackListItem({ track, onTrackSelect: handleTrackSelect }) {
 	const { title, thumbnailM, artistsNames } = track
-	const isActiveTrack = false
+	const isActiveTrack = useActiveTrack()?.encodeId === track.encodeId
 	return (
-		<TouchableHighlight>
+		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
 			<View style={styles.trackItemContainer}>
 				{/* Track thumb */}
 				<View>

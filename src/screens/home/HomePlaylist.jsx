@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
 	},
 	bannerImage: {
 		width: '100%',
-		height: 150,
+		height: 180,
 		borderRadius: 8,
-		objectFit: 'contain',
+		objectFit: 'cover',
 	},
 })
 

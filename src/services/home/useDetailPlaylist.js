@@ -3,7 +3,7 @@ import { getDetailPlaylist } from '../../api'
 
 function useDetailPlaylist(encodeId) {
 	const { isPending: isLoadingPlaylist, data } = useQuery({
-		queryKey: ['playlist'],
+		queryKey: ['playlist', encodeId],
 		queryFn: () => getDetailPlaylist(encodeId),
 		// cacheTime: 0,
 	})
