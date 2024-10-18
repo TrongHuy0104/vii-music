@@ -7,30 +7,42 @@ import Background from '../components/Background'
 import Logo from '../components/Logo'
 import TextInput from '../components/TextInput'
 import { colors } from '../constants/tokens'
-import useSignIn from '../services/auth/useSignIn'
-import { emailValidator, passwordValidator } from '../utils/helpers'
+import useSignUp from '../services/auth/useSignUp'
+import {
+	confirmPasswordValidator,
+	emailValidator,
+	nameValidator,
+	passwordValidator,
+} from '../utils/helpers'
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
 	const navigation = useNavigation()
-	const { isLoadingSignIn, signIn } = useSignIn()
+	const { signUp, isLoading } = useSignUp()
+	const [name, setName] = useState({ value: '', error: '' })
 	const [email, setEmail] = useState({ value: '', error: '' })
 	const [password, setPassword] = useState({ value: '', error: '' })
+	const [confirmPassword, setConfirmPassword] = useState({ value: '', error: '' })
 
-	const onLoginPressed = () => {
+	const onSignUpPressed = () => {
+		const nameError = nameValidator(name.value)
 		const emailError = emailValidator(email.value)
 		const passwordError = passwordValidator(password.value)
-		if (emailError || passwordError) {
+		const confirmPasswordError = confirmPasswordValidator(password.value, confirmPassword.value)
+		if (emailError || passwordError || nameError || confirmPasswordError) {
+			setName({ ...name, error: nameError })
 			setEmail({ ...email, error: emailError })
 			setPassword({ ...password, error: passwordError })
+			setConfirmPassword({ ...confirmPassword, error: confirmPasswordError })
 			return
 		}
-
-		signIn(
-			{ email: email.value, password: password.value },
+		signUp(
+			{ email: email.value, password: password.value, fullName: name.value },
 			{
 				onSettled: () => {
 					setEmail({ value: '', error: '' })
 					setPassword({ value: '', error: '' })
+					setConfirmPassword({ value: '', error: '' })
+					setName({ value: '', error: '' })
 				},
 			},
 		)
@@ -39,7 +51,16 @@ export default function LoginScreen() {
 	return (
 		<Background>
 			<Logo />
-			<Header title="Đăng nhập" />
+			<Header title="Đăng ký" />
+			<TextInput
+				label="Name"
+				returnKeyType="next"
+				value={name.value}
+				onChangeText={(text) => setName({ value: text, error: '' })}
+				error={!!name.error}
+				errorText={name.error}
+				placeHolder="Name"
+			/>
 			<TextInput
 				label="Email"
 				returnKeyType="next"
@@ -63,11 +84,21 @@ export default function LoginScreen() {
 				secureTextEntry
 				placeHolder="Password"
 			/>
-			<Button title={`${isLoadingSignIn ? 'Đang tải...' : 'Đăng nhập'}`} onPress={onLoginPressed} />
+			<TextInput
+				label="Confirm Password"
+				returnKeyType="done"
+				value={confirmPassword.value}
+				onChangeText={(text) => setConfirmPassword({ value: text, error: '' })}
+				error={!!confirmPassword.error}
+				errorText={confirmPassword.error}
+				secureTextEntry
+				placeHolder="Confirm Password"
+			/>
+			<Button title={`${isLoading ? 'Đang tải...' : 'Đăng ký'}`} onPress={onSignUpPressed} />
 			<View style={styles.row}>
-				<Text style={{ color: colors.white }}>Bạn chưa có tài khoản? </Text>
-				<TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Register')}>
-					<Text style={styles.link}>Đăng ký ngay!</Text>
+				<Text style={{ color: colors.white }}>Bạn đã có tài khoản? </Text>
+				<TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Login')}>
+					<Text style={styles.link}>Đăng nhập ngay!</Text>
 				</TouchableOpacity>
 			</View>
 			<View style={styles.row}></View>

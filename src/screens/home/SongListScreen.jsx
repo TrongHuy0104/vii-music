@@ -19,6 +19,7 @@ export default function SongListScreen({ route }) {
 				<Text>Loading...</Text>
 			</View>
 		)
+
 	const { title, thumbnailM: thumbnail, song } = playlists
 	const filterSongs = getInPremiumSongs(song.items)
 	const filterSongsDuration = getInPremiumSongsDuration(filterSongs)
@@ -31,7 +32,7 @@ export default function SongListScreen({ route }) {
 					numSongs={filterSongs.length}
 					duration={filterSongsDuration}
 				/>
-				<TrackList scrollEnabled={false} songs={filterSongs} />
+				<TrackList scrollEnabled={false} songs={filterSongs} id={encodeId} />
 			</ScrollView>
 		</View>
 	)
