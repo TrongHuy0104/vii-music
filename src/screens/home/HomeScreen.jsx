@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import BannerList from '../../components/BannerList'
-import Header from '../../components/Header'
 import useHome from '../../services/home/useHome'
 import { defaultStyles } from '../../styles'
 
+import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
 import HomeTabPlaylist from './HomeTabPlaylist'
 
