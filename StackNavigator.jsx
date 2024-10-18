@@ -3,13 +3,29 @@ import createBottomTabNavigator from '@react-navigation/bottom-tabs/src/navigato
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { BlurView } from 'expo-blur'
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { FloatingPlayer } from './src/components/FloatingPlayer'
 import { colors, fontSize } from './src/constants/tokens'
 import HomeStack from './src/screens/home/HomeStack'
+import LoginScreen from './src/screens/LoginScreen'
+import PlayerScreen from './src/screens/PlayerScreen'
 import PlaylistStack from './src/screens/playlist/PlaylistStack'
+import RegisterScreen from './src/screens/RegisterScreen'
 import SongStack from './src/screens/song/SongStack'
 import UserScreen from './src/screens/user/UserScreen'
+import { useAuth } from './src/services/auth/useAuth'
+import { navigationRef } from './src/utils/rootNavigation'
+
+const SafeAreaWrapper = ({ children, safeArea = true }) => {
+	return safeArea ? (
+		<SafeAreaView style={styles.droidSafeArea}>
+			<SafeAreaProvider>{children}</SafeAreaProvider>
+		</SafeAreaView>
+	) : (
+		<View style={{ flex: 1 }}>{children}</View>
+	)
+}
 
 const Tab = createBottomTabNavigator()
 
@@ -95,14 +111,67 @@ function BottomTabs() {
 const Stack = createNativeStackNavigator()
 
 function Navigation() {
+	const { session } = useAuth()
+
 	return (
-		<NavigationContainer>
+		<NavigationContainer ref={navigationRef}>
 			<Stack.Navigator>
-				{/* <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> */}
-				<Stack.Screen name="Main" component={BottomTabs} options={{ headerShown: false }} />
+				{!session ? (
+					<>
+						<Stack.Screen
+							name="Login"
+							component={() => (
+								<SafeAreaWrapper safeArea={false}>
+									<LoginScreen />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="Register"
+							component={() => (
+								<SafeAreaWrapper safeArea={false}>
+									<RegisterScreen />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+					</>
+				) : (
+					<>
+						<Stack.Screen
+							name="Main"
+							component={() => (
+								<SafeAreaWrapper>
+									<BottomTabs />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="Player"
+							component={PlayerScreen}
+							options={{
+								headerShown: false,
+								presentation: 'modal', // For modal-like behavior
+								gestureEnabled: true,
+								gestureDirection: 'default', // Vertical swipe gesture
+								animationDuration: 400,
+							}}
+						/>
+					</>
+				)}
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
 }
+
+const styles = StyleSheet.create({
+	droidSafeArea: {
+		flex: 1,
+		backgroundColor: `${colors.background}`,
+		paddingTop: Platform.OS === 'android' ? 15 : 0,
+	},
+})
 
 export default Navigation
