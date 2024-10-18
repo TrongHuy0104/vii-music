@@ -1,5 +1,6 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import ArtistProfile from '../../components/ArtistProfile'
 import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
 import useUser from '../../services/auth/useUser'
@@ -11,6 +12,7 @@ export default function UserScreen() {
 	return (
 		<View style={defaultStyles.container}>
 			<Header title="Cá nhân" />
+			<ArtistProfile />
 		</View>
 	)
 }
