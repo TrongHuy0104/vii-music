@@ -1,10 +1,10 @@
 import React from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import ArtistProfile from '../../components/ArtistProfile'
 import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
 import useUser from '../../services/auth/useUser'
 import { defaultStyles } from '../../styles'
+import ArtistProfile from '../ArtistProfile'
 
 export default function UserScreen() {
 	const { isLoading, user } = useUser()
