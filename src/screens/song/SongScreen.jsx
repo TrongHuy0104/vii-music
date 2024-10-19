@@ -1,13 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { View } from 'react-native'
+import Heading from '../../components/Heading'
 import { defaultStyles } from '../../styles'
+import FavoriteBox from './FavoriteBox'
 
-export default function SongScreen() {
+export default function SongScreen({ navigation }) {
 	return (
 		<View style={defaultStyles.container}>
-			<Text>Songs</Text>
+			<Heading title="Bài hát" />
+			<FavoriteBox navigation={navigation} />
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({})

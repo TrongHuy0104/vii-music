@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SearchScreen from '../SearchScreen'
+import FavoriteSongList from './FavoriteSongList'
 import SongScreen from './SongScreen'
 
 const Stack = createNativeStackNavigator()
@@ -21,6 +22,13 @@ export default function SongStack() {
 			<Stack.Screen
 				name="Search"
 				component={SearchScreen}
+				options={{
+					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name="FavoriteSongs"
+				component={FavoriteSongList}
 				options={{
 					headerShown: false,
 				}}
