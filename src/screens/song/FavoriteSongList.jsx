@@ -1,107 +1,16 @@
-// import { MaterialIcons } from '@expo/vector-icons'
-// import { useRoute } from '@react-navigation/native'
-// import React from 'react'
-// import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-// import Heading from '../../components/Heading'
-// import { colors, fontSize, screenPadding } from '../../constants/tokens'
-// import { defaultStyles } from '../../styles'
-
-// const FavoriteSongList = () => {
-// 	const route = useRoute()
-// 	const { favoriteSongs } = route.params
-
-// 	return (
-// 		<View style={styles.container}>
-// 			<Heading />
-// 			<Text style={styles.title}>Bài hát yêu thích</Text>
-// 			<Text style={styles.text}>{favoriteSongs.length} bài hát</Text>
-
-// 			<FlatList
-// 				data={favoriteSongs}
-// 				keyExtractor={(item) => item.id.toString()}
-// 				renderItem={({ item }) => (
-// 					<View style={styles.songItem}>
-// 						<View style={styles.songInfoContainer}>
-// 							<View style={styles.songDetails}>
-// 								{/* <Image source={{ uri: item.thumbnail }} style={styles.album} /> */}
-// 								<Text style={styles.songTitle} numberOfLines={1} ellipsizeMode="tail">
-// 									{item.title}
-// 								</Text>
-// 								<Text style={styles.artistName} numberOfLines={1} ellipsizeMode="tail">
-// 									{item.artist}
-// 								</Text>
-// 							</View>
-// 							<View style={styles.iconsContainer}>
-// 								<MaterialIcons name="favorite" size={2} color="#00CCCC" />
-// 								<TouchableOpacity>
-// 									<MaterialIcons name="more-horiz" size={20} color={colors.text} />
-// 								</TouchableOpacity>
-// 							</View>
-// 						</View>
-// 					</View>
-// 				)}
-// 			/>
-// 		</View>
-// 	)
-// }
-
-// const styles = StyleSheet.create({
-// 	container: {
-// 		...defaultStyles.container,
-// 		paddingHorizontal: screenPadding.horizontal,
-// 	},
-// 	title: {
-// 		fontSize: 20,
-// 		textAlign: 'center',
-// 		color: colors.text,
-// 		fontWeight: 'bold',
-// 	},
-// 	text: {
-// 		flexDirection: 'row',
-// 		fontSize: fontSize.base,
-// 		justifyContent: 'center',
-// 		textAlign: 'center',
-// 		marginBottom: 10,
-// 		color: colors.text,
-// 	},
-// 	songItem: {
-// 		padding: 10,
-// 		flexDirection: 'row',
-// 		alignItems: 'center',
-// 		justifyContent: 'space-between',
-// 	},
-// 	songInfoContainer: {
-// 		flexDirection: 'row',
-// 		alignItems: 'center',
-// 		justifyContent: 'space-between',
-// 		width: '100%',
-// 	},
-// 	songDetails: {
-// 		flexDirection: 'column',
-// 		flex: 1,
-// 		marginRight: 10,
-// 	},
-// 	songTitle: {
-// 		fontSize: fontSize.base,
-// 		color: colors.text,
-// 	},
-// 	artistName: {
-// 		fontSize: fontSize.small,
-// 		color: 'grey',
-// 	},
-// 	iconsContainer: {
-// 		flexDirection: 'row',
-// 		alignItems: 'center',
-// 		justifyContent: 'flex-end',
-// 	},
-// })
-
-// export default FavoriteSongList
-
 import { MaterialIcons } from '@expo/vector-icons'
 import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+	FlatList,
+	Image,
+	Modal,
+	Pressable,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import Heading from '../../components/Heading'
 import { colors, fontSize, screenPadding } from '../../constants/tokens'
 import { defaultStyles } from '../../styles'
@@ -130,32 +39,35 @@ const FavoriteSongList = () => {
 	return (
 		<View style={styles.container}>
 			<Heading />
-			<Text style={styles.title}>Bài hát yêu thích</Text>
-			<Text style={styles.text}>{favoriteSongs.length} bài hát</Text>
+			<Text style={styles.head}>Bài hát yêu thích</Text>
+			<Text style={styles.countSong}>{favoriteSongs.length} bài hát</Text>
 
 			<FlatList
 				data={favoriteSongs}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
-					<View style={styles.songItem}>
-						<View style={styles.songInfoContainer}>
-							<View style={styles.songDetails}>
-								{/* <Image source={{ uri: item.thumbnail }} style={styles.album} /> */}
-								<Text style={styles.songTitle} numberOfLines={1} ellipsizeMode="tail">
-									{item.title}
-								</Text>
-								<Text style={styles.artistName} numberOfLines={1} ellipsizeMode="tail">
-									{item.artist}
-								</Text>
-							</View>
-							<View style={styles.iconsContainer}>
-								<TouchableOpacity onPress={() => openConfirmationModal(item)}>
-									<MaterialIcons name="favorite" size={24} color="#00CCCC" />
-								</TouchableOpacity>
-								<TouchableOpacity>
-									<MaterialIcons name="more-horiz" size={20} color={colors.text} />
-								</TouchableOpacity>
-							</View>
+					<View style={styles.item}>
+						<Image
+							source={{
+								uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHJkxpiJd9zk2SuRpU--HcRctheHF5rcLq8A&s',
+							}}
+							style={styles.albumCover}
+						/>
+						<View style={styles.infoContainer}>
+							<Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+								{item.title}
+							</Text>
+							<Text style={styles.artist} numberOfLines={1} ellipsizeMode="tail">
+								{item.artist}
+							</Text>
+						</View>
+						<View style={styles.iconsContainer}>
+							<TouchableOpacity onPress={() => openConfirmationModal(item)}>
+								<MaterialIcons name="favorite" size={24} color="#00CCCC" />
+							</TouchableOpacity>
+							<TouchableOpacity>
+								<MaterialIcons name="more-horiz" size={20} color={colors.text} />
+							</TouchableOpacity>
 						</View>
 					</View>
 				)}
@@ -194,43 +106,40 @@ const styles = StyleSheet.create({
 		...defaultStyles.container,
 		paddingHorizontal: screenPadding.horizontal,
 	},
-	title: {
+	head: {
+		color: colors.text,
 		fontSize: 20,
 		textAlign: 'center',
-		color: colors.text,
-		fontWeight: 'bold',
 	},
-	text: {
-		flexDirection: 'row',
+	countSong: {
+		color: colors.text,
 		fontSize: fontSize.base,
-		justifyContent: 'center',
 		textAlign: 'center',
-		marginBottom: 10,
-		color: colors.text,
 	},
-	songItem: {
-		padding: 10,
+	item: {
 		flexDirection: 'row',
+		marginVertical: 8,
+		paddingVertical: 5,
 		alignItems: 'center',
-		justifyContent: 'space-between',
+		borderRadius: 8,
+		paddingHorizontal: 10,
 	},
-	songInfoContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		width: '100%',
-	},
-	songDetails: {
-		flexDirection: 'column',
-		flex: 1,
+	albumCover: {
+		width: 60,
+		height: 60,
+		borderRadius: 8,
 		marginRight: 10,
 	},
-	songTitle: {
-		fontSize: fontSize.base,
+	infoContainer: {
+		flex: 1,
+	},
+	title: {
+		fontSize: fontSize.sm,
+		fontWeight: 'bold',
 		color: colors.text,
 	},
-	artistName: {
-		fontSize: fontSize.small,
+	artist: {
+		fontSize: fontSize.sm,
 		color: 'grey',
 	},
 	iconsContainer: {

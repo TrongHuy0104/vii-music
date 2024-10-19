@@ -1,32 +1,31 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import TrackListItem from '../../components/TrackListItem'
 import { colors, fontSize, screenPadding } from '../../constants/tokens'
 import useHome from '../../services/home/useHome'
-import { defaultStyles } from '../../styles'
+import { useQueue } from '../../store/queue'
+import { defaultStyles, utilsStyles } from '../../styles'
+
+const ItemDivider = () => (
+	<View style={{ ...utilsStyles.itemSeparator, marginVertical: 9, marginLeft: 60 }} />
+)
 
 const NewReleaseList = () => {
 	const { isLoading, newrealeases } = useHome()
 	const navigation = useNavigation()
+	const { setActiveQueueId, setCurrentTrackId } = useQueue()
 
+	const handleTrackSelect = async (selectedTrack) => {
+		setActiveQueueId()
+		setCurrentTrackId(selectedTrack.encodeId)
+	}
 	if (isLoading) {
 		return <Text>Loading...</Text>
 	}
 
-	const renderItem = ({ item }) => (
-		<View style={styles.item}>
-			<Image source={{ uri: item.thumbnail }} style={styles.albumCover} />
-			<View style={styles.infoContainer}>
-				<Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-					{item.title}
-				</Text>
-				<Text style={styles.artist} numberOfLines={1} ellipsizeMode="tail">
-					{item.artistsNames}
-				</Text>
-			</View>
-		</View>
-	)
+	const renderItem = ({ item }) => <TrackListItem track={item} onTrackSelect={handleTrackSelect} />
 
 	return (
 		<View style={styles.container}>
@@ -41,6 +40,8 @@ const NewReleaseList = () => {
 				keyExtractor={(item) => item.encodeId.toString()}
 				renderItem={renderItem}
 				showsVerticalScrollIndicator={false}
+				ItemSeparatorComponent={ItemDivider}
+				ListFooterComponent={ItemDivider}
 			/>
 		</View>
 	)
@@ -69,7 +70,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 8,
 		paddingHorizontal: 10,
-		// border: utilsStyles.itemSeparator,
 	},
 	albumCover: {
 		width: 60,
@@ -79,15 +79,17 @@ const styles = StyleSheet.create({
 	},
 	infoContainer: {
 		flex: 1,
+		borderColor: colors.textMuted,
+		borderBottomWidth: 0.3,
 	},
 	title: {
-		fontSize: fontSize.base,
+		fontSize: fontSize.sm,
 		fontWeight: 'bold',
 		color: colors.text,
 	},
 	artist: {
-		fontSize: fontSize.base,
-		color: colors.textMuted, // Use the muted text color
+		fontSize: fontSize.sm,
+		color: colors.textMuted,
 	},
 })
 

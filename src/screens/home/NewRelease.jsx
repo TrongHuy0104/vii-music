@@ -158,13 +158,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	title: {
-		fontSize: fontSize.base,
+		fontSize: fontSize.sm,
 		fontWeight: 'bold',
 		color: colors.text,
 		maxWidth: 200,
 	},
 	artist: {
-		fontSize: fontSize.base,
+		fontSize: fontSize.sm,
 		color: 'gray',
 		maxWidth: 200,
 	},
