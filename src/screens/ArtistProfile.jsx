@@ -47,10 +47,15 @@ const ArtistProfile = ({ route }) => {
 	return (
 		<ScrollView
 			contentContainerStyle={[
-				{ flexGrow: 1, minHeight: '100%', backgroundColor: colors.background },
+				{
+					flexGrow: 1,
+					minHeight: '100%',
+					backgroundColor: colors.background,
+					paddingHorizontal: 8,
+				},
 			]}
 		>
-			<Heading title="Thông tin  nghệ sĩ" />
+			<Heading title="Thông tin nghệ sĩ" />
 
 			{/* Header section - artist image and info */}
 			<View style={styles.header}>
