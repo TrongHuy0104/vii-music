@@ -20,12 +20,11 @@ const HomePlaylist = ({ playlistItem, onPress }) => {
 const styles = StyleSheet.create({
 	bannerContainer: {
 		flex: 1,
-
 		margin: 8,
 	},
 	bannerImage: {
 		width: '100%',
-		height: 180,
+		height: '100%',
 		borderRadius: 8,
 		objectFit: 'cover',
 	},

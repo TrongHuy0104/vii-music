@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SearchScreen from '../SearchScreen'
-import SongScreen from './SongScreen'
-
+// import SongScreen from './SongScreen'
+import FavoriteArtist from '../favorite/FavoriteArtist'
 const Stack = createNativeStackNavigator()
 
 export default function SongStack() {
@@ -16,7 +16,7 @@ export default function SongStack() {
 				options={{
 					headerShown: false,
 				}}
-				component={SongScreen}
+				component={FavoriteArtist}
 			/>
 			<Stack.Screen
 				name="Search"
