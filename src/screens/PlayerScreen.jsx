@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useEffect, useState } from 'react'
@@ -13,14 +14,17 @@ import { colors, fontSize, screenPadding } from '../constants/tokens'
 import { getStringData } from '../hooks/useAsyncStorage'
 import { usePlayerBackground } from '../hooks/usePlayerBackground'
 import useDetailPlaylist from '../services/home/useDetailPlaylist'
+import FavoritePlaylistModal from '../components/FavoritePlaylistModal';
 import { useQueue } from '../store/queue'
 import { defaultStyles } from '../styles'
+import { addSongToPlaylist } from '../api/apiPlaylist';
 
 export default function PlayerScreen() {
 	const activeTrack = useActiveTrack()
 	const { activeQueueId } = useQueue()
 	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlistsId
 	const [loading, setLoading] = useState(true) // State to handle loading
+	const [isModalVisible, setModalVisible] = useState(false)
 
 	// Fetch playlistsId asynchronously
 	useEffect(() => {
@@ -37,6 +41,22 @@ export default function PlayerScreen() {
 
 		fetchPlaylistsId()
 	}, [])
+
+	const openModal = () => {
+		setModalVisible(true)
+	}
+
+	const closeModal = () => {
+		setModalVisible(false)
+	}
+
+	// Handle add song to playlist function
+	const handleAddSongToPlaylist = async (playlistId) => {
+		if (activeTrack) {
+			await addSongToPlaylist(activeTrack, playlistId)
+			closeModal() 
+		}
+	}
 
 	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
 	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri)
@@ -92,6 +112,7 @@ export default function PlayerScreen() {
 									color={isFavorite ? colors.primary : colors.icon}
 									style={{ marginHorizontal: 14 }}
 								/>
+								<MaterialCommunityIcons name="music-note-plus" size={24} color={colors.icon} onPress={openModal} />
 							</View>
 							{activeTrack.artistsNames && (
 								<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
@@ -104,6 +125,13 @@ export default function PlayerScreen() {
 					</View>
 				</View>
 			</View>
+			{/* Modal to select playlist */}
+			<FavoritePlaylistModal
+				visible={isModalVisible}
+				onClose={closeModal}
+				playlists={playlists}
+				onAddSongToPlaylist={handleAddSongToPlaylist} // add song to playlist
+			/>
 		</LinearGradient>
 	)
 }
