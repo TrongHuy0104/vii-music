@@ -264,26 +264,15 @@ export default function PlayerScreen() {
 		}
 	}
 
-	// Navigate to artist profile
-	// const navigateToArtistProfile = (artistLink) => {
-	// 	console.log('Navigating to artist profile:', artistLink)
-	// 	// Remove "/" if present at the start of artistLink
-	// 	const artistName = artistLink.startsWith('/') ? artistLink.substring(1) : artistLink
-	// 	// Navigate to ArtistProfile screen, passing the artist's name
-	// 	navigation.navigate('ArtistProfile', { artistName })
-	// 	console.log('Processed artist name:', artistName)
-	// }
 	const navigateToArtistProfile = (artistLink) => {
 		console.log('Navigating to artist profile:', artistLink)
 
-		// Kiểm tra nếu link có chứa '/nghe-si/' thì loại bỏ phần đó, nếu không giữ nguyên
+		// Check if the link contains '/nghe-si/', if yes, remove that part; otherwise, keep it as is
 		const artistName = artistLink.includes('/nghe-si/')
-			? artistLink.replace('/nghe-si/', '')
-			: artistLink.replace('/', '') // Loại bỏ dấu '/' ở đầu nếu có
+			? artistLink.replace('/nghe-si/', '') // Remove '/nghe-si/' if present
+			: artistLink.replace('/', '') // Remove leading '/' if present
 
-		// Điều hướng tới trang ArtistProfile với tên nghệ sĩ đã xử lý
 		navigation.navigate('ArtistProfile', { artistName })
-		console.log('Artist name:', artistName)
 	}
 	const artistNamess = activeTrack?.artists
 		? activeTrack.artists.map((artist) => safeToString(artist.name)).join(', ')
@@ -375,9 +364,6 @@ export default function PlayerScreen() {
 												</TouchableOpacity>
 											)}
 										/>
-										{/* <TouchableOpacity onPress={() => setModalVisible(false)}>
-											<Text style={styles.closeButton}>Đóng</Text>
-										</TouchableOpacity> */}
 									</View>
 								</Modal>
 							</View>

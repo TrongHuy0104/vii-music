@@ -20,12 +20,8 @@ const safeToString = (value) => (value ? value.toString() : '')
 const ArtistProfile = ({ route }) => {
 	// Get artistName from params
 	const { artistName } = route.params
-	console.log('Received artistName:', artistName)
 	// Use the hook to get artist data
 	const { isLoadingArtist, artist } = useDetailArtist(artistName)
-
-	// Log data to check
-	console.log('Artist data:', artist)
 
 	// Process biography to remove <br> tags
 	const biographyy = artist?.biography?.replace(/<br\s*\/?>/gi, '\n')
@@ -54,7 +50,8 @@ const ArtistProfile = ({ route }) => {
 				{ flexGrow: 1, minHeight: '100%', backgroundColor: colors.background },
 			]}
 		>
-			<Heading title="Artist Profile" />
+			<Heading title="Thông tin  nghệ sĩ" />
+
 			{/* Header section - artist image and info */}
 			<View style={styles.header}>
 				<Image
@@ -66,21 +63,17 @@ const ArtistProfile = ({ route }) => {
 					style={styles.gradient}
 				>
 					<Text style={styles.artistName}>{safeToString(artist?.name)}</Text>
-					{/* <Text style={styles.fansCount}>
-						{safeToString(formatNumber(artist?.totalFollow))} followers
-					</Text> */}
-					<Text style={styles.fansCount}>{safeToString(artist?.totalFollow)} followers</Text>
 				</LinearGradient>
 			</View>
 
 			{/* Additional information section */}
 			<View style={styles.additionalInfo}>
-				<Text style={styles.sectionTitle}>Information</Text>
-				<Text style={styles.infoText}>Real name: {artist?.realname || 'Unknown'}</Text>
-				<Text style={styles.infoText}>Birthday: {artist?.birthday || 'Unknown'}</Text>
-				<Text style={styles.infoText}>Country: {artist?.national || 'Unknown'}</Text>
-				<Text style={styles.infoText}>Genre: {artist?.genre || 'Unknown'}</Text>
-				<Text style={styles.bioText}>{biographyy || 'No biography available'}</Text>
+				<Text style={styles.sectionTitle}>Thông tin</Text>
+				<Text style={styles.infoText}>Tên thật: {artist?.realname || 'Chưa rõ'}</Text>
+				<Text style={styles.infoText}>Ngày sinh: {artist?.birthday || 'Chưa rõ'}</Text>
+				<Text style={styles.infoText}>Quốc gia: {artist?.national || 'Chưa rõ'}</Text>
+				<Text style={styles.infoText}>Thể loại: {artist?.genre || 'Chưa rõ'}</Text>
+				<Text style={styles.bioText}>{biographyy || 'Chưa rõ'}</Text>
 			</View>
 		</ScrollView>
 	)
@@ -115,13 +108,6 @@ const styles = StyleSheet.create({
 		textShadowColor: 'rgba(0, 0, 0, 0.5)', // Text shadow color
 		textShadowOffset: { width: 2, height: 2 }, // Text shadow direction
 		textShadowRadius: 4, // Text shadow blur radius
-	},
-	fansCount: {
-		fontSize: 18, // Increase font size
-		color: '#cdcdcd',
-		textShadowColor: 'rgba(0, 0, 0, 0.5)', // Text shadow color
-		textShadowOffset: { width: 1, height: 1 }, // Text shadow direction
-		textShadowRadius: 2, // Text shadow blur radius
 	},
 	additionalInfo: {
 		paddingHorizontal: 10,
