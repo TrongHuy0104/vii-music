@@ -39,7 +39,20 @@ const ArtistProfile = ({ route }) => {
 
 	// Show spinner if the data is still loading
 	if (isLoadingArtist) {
-		return <ActivityIndicator size="large" color="#6200EA" />
+		return (
+			<View
+				style={[
+					{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: colors.background,
+					},
+				]}
+			>
+				<ActivityIndicator size="large" color="#FFF" s />
+			</View>
+		)
 	}
 
 	return (
@@ -137,6 +150,11 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#aaa',
 		marginTop: 10,
+	},
+	loadingContainer: {
+		flex: 1, // Full screen
+		justifyContent: 'center', // Center content vertically
+		alignItems: 'center', // Center content horizontally
 	},
 })
 

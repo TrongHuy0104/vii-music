@@ -351,6 +351,7 @@ export default function PlayerScreen() {
 									onSwipeComplete={() => setModalVisible(false)} // Close modal when swiped down
 									swipeDirection="down" // Allow swipe down gesture
 									style={styles.modalContainer} // Align modal at the bottom
+									onBackdropPress={() => setModalVisible(false)}
 									backdropOpacity={0.3} // Dim the background
 								>
 									<View style={styles.modalContent}>
@@ -374,9 +375,9 @@ export default function PlayerScreen() {
 												</TouchableOpacity>
 											)}
 										/>
-										<TouchableOpacity onPress={() => setModalVisible(false)}>
+										{/* <TouchableOpacity onPress={() => setModalVisible(false)}>
 											<Text style={styles.closeButton}>Đóng</Text>
-										</TouchableOpacity>
+										</TouchableOpacity> */}
 									</View>
 								</Modal>
 							</View>
