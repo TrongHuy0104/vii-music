@@ -10,19 +10,12 @@ import {
 	View,
 } from 'react-native'
 import { colors } from '../constants/tokens'
+
+import Heading from '../components/Heading'
 import useDetailArtist from '../services/home/useArtistProfile' // Import hook to get artist information
 
 const { width } = Dimensions.get('window') // Get screen dimensions
 const safeToString = (value) => (value ? value.toString() : '')
-// function formatNumber(num) {
-// 	if (num >= 1000000) {
-// 		return (num / 1000000).toFixed(1) + 'M' // If number >= 1 million, convert to "M"
-// 	} else if (num >= 1000) {
-// 		return (num / 1000).toFixed(1) + 'K' // If number >= 1 thousand, convert to "K"
-// 	} else {
-// 		return num.toString() // If less than 1 thousand, return the number as a string
-// 	}
-// }
 
 const ArtistProfile = ({ route }) => {
 	// Get artistName from params
@@ -61,6 +54,7 @@ const ArtistProfile = ({ route }) => {
 				{ flexGrow: 1, minHeight: '100%', backgroundColor: colors.background },
 			]}
 		>
+			<Heading title="Artist Profile" />
 			{/* Header section - artist image and info */}
 			<View style={styles.header}>
 				<Image
@@ -99,6 +93,7 @@ const styles = StyleSheet.create({
 	header: {
 		position: 'relative', // Position LinearGradient over the image
 		alignItems: 'center',
+		marginTop: 10,
 	},
 	artistImage: {
 		height: width, // Image height equals screen width
