@@ -65,3 +65,22 @@ export async function getSongAudio(pId) {
 
 	return { songAudio }
 }
+
+export async function searchSongsAndArtists(keyword) {
+	try {
+		const response = await axios.get(`/search?keyword=${encodeURIComponent(keyword)}`)
+
+		const { songs, artists } = response.data.data
+		if (!songs.length && !artists.length) {
+			return { songs: [], artists: [] }
+		}
+
+		return {
+			songs: songs.length > 0 ? songs : [],
+			artists: artists.length > 0 ? artists : [],
+		}
+	} catch (error) {
+		console.error('Error when searching:', error)
+		throw error
+	}
+}
