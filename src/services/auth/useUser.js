@@ -6,9 +6,6 @@ function useUser() {
 		queryKey: ['user'],
 		queryFn: getCurrentUser,
 	})
-
-	console.log(user)
-
 	return { isLoading, user }
 }
 

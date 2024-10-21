@@ -1,6 +1,5 @@
 import React from 'react'
 import { FlatList, View } from 'react-native'
-import { useActiveTrack } from 'react-native-track-player'
 import { storeStringData } from '../hooks/useAsyncStorage'
 import { useQueue } from '../store/queue'
 import { utilsStyles } from '../styles'
@@ -11,8 +10,7 @@ const ItemDivider = () => (
 )
 
 export default function TrackList({ scrollEnabled, songs, id }) {
-	const activeTrack = useActiveTrack()
-	const { activeQueueId, setActiveQueueId, setCurrentTrackId } = useQueue()
+	const { setActiveQueueId, setCurrentTrackId } = useQueue()
 
 	const handleTrackSelect = async (selectedTrack) => {
 		setActiveQueueId(id)
