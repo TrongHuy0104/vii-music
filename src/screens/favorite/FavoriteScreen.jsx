@@ -14,20 +14,19 @@ export default function FavoriteScreen() {
 	const { isLoadingFavoriteSongs, favoriteSongs } = useFavoriteSongs()
 	const { activeQueueId, setActiveQueueId, setActiveTab } = useQueue()
 	const queueOffset = useRef(0)
+	const songsLength = useRef(0)
 
 	const handleTrackSelect = async (selectedTrack) => {
 		setActiveTab('favorite')
 		const filterSongs = favoriteSongs.map((song) => song.Song)
 		const trackIndex = filterSongs.findIndex((track) => track.url === selectedTrack.url)
-		console.log('trackIndex', trackIndex)
 
 		const id = 'favoriteId'
 		const isChangingQueue = id !== activeQueueId
-		console.log('isChangingQueue', isChangingQueue)
-		if (isChangingQueue) {
+		if (isChangingQueue || songsLength.current !== filterSongs.length) {
 			const beforeTracks = filterSongs.slice(0, trackIndex)
 			const afterTracks = filterSongs.slice(trackIndex + 1)
-			console.log('beforeTracks', afterTracks)
+			songsLength.current = filterSongs.length
 
 			await TrackPlayer.reset()
 
@@ -45,7 +44,6 @@ export default function FavoriteScreen() {
 				trackIndex - queueOffset.current < 0
 					? filterSongs?.length + trackIndex - queueOffset.current
 					: trackIndex - queueOffset.current
-			console.log('nextTrackIndex', nextTrackIndex)
 
 			await TrackPlayer.skip(nextTrackIndex)
 			await TrackPlayer.play()
