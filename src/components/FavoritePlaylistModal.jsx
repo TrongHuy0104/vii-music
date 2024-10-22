@@ -4,7 +4,7 @@ import { colors, fontSize, fontWeight } from '../constants/tokens'
 import CreatePlaylistModal from './CreatePlaylistModal' // Import component CreatePlaylistModal
 import UserPlaylist from './UserPlaylist' // Import component UserPlaylist
 
-const FavoritePlaylistModal = ({ visible, onClose, onCreatePlaylist, onAddSongToPlaylist }) => {
+const FavoritePlaylistModal = ({ visible, onClose, onCreatePlaylist, onAddSongToPlaylist, playlists }) => {
   const [isCreateModalVisible, setCreateModalVisible] = useState(false)
 
   const openCreatePlaylistModal = () => {
@@ -15,9 +15,9 @@ const FavoritePlaylistModal = ({ visible, onClose, onCreatePlaylist, onAddSongTo
     setCreateModalVisible(false)
   }
 
-  const handleSelectPlaylist = (playlist) => {
+  const handleSelectPlaylist = (playlists) => {
     // add song to playlist
-    onAddSongToPlaylist(playlist)
+    onAddSongToPlaylist(playlists)
   }
 
   return (

@@ -9,6 +9,8 @@ const FavoritePlaylist = ({ navigation }) => {
 
   // Function to handle selecting a playlist and navigating to the UserSongList screen
   const handleSelectPlaylist = (playlist) => {
+    console.log('FavoritePlaylist: ',playlist.id);
+    
     navigation.navigate('UserSongList', { playlistId: playlist.id });
   };
 

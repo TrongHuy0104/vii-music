@@ -32,6 +32,7 @@ export default function PlayerScreen() {
 			try {
 				const id = await getStringData('playlistId')
 				setPlaylistsId(id)
+				console.log('playlists:', id);
 			} catch (error) {
 				console.error('Error fetching playlist ID:', error)
 			} finally {

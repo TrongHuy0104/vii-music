@@ -46,7 +46,7 @@ const addSongIfNotExists = async (songData) => {
         duration: songData.duration,
         streamingStatus: songData.streamingStatus,
         encodeId: songData.encodeId,
-        audio: songData.audio,
+        src: songData.src,
       }
     ])
     .select('id') /// Return only the id of the newly inserted song
@@ -81,7 +81,7 @@ export async function addSongToPlaylist(song, playlistId) {
           duration: song.duration,
           streamingStatus: song.streamingStatus,
           encodeId: song.encodeId,
-          audio: song.audio,
+          url: song.url,
         }])
         .select()  // Return the newly inserted record
         .single(); // Ensure only one record is returned

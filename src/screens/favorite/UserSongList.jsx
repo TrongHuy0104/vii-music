@@ -89,6 +89,8 @@ export default function UserSongList({ route }) {
     }
 
     fetchSongs()
+    console.log("playlistID",playlistId);
+    
   }, [playlistId])
 
   const getThumbnailImages = (songs) => {
@@ -116,7 +118,7 @@ export default function UserSongList({ route }) {
         numSongs={songs.length}
         duration={songs.reduce((acc, song) => acc + song.duration, 0)} // Summing the duration of all songs
       />
-      <TrackList songs={songs} />
+      <TrackList songs={songs} id={playlistId} />
     </View>
   )
 }
