@@ -7,13 +7,16 @@ import { defaultStyles } from '../../styles'
 
 import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
+import useUser from '../../services/auth/useUser'
 import HomeTabPlaylist from './HomeTabPlaylist'
 
 export default function HomeScreen() {
-	const { isLoading, banners, playlists } = useHome()
+	const { isLoading: isLoadingHome, banners, playlists } = useHome()
+	const { isLoading: isLoadingUser } = useUser()
+
 	const navigation = useNavigation() // Access navigation object
 
-	if (isLoading)
+	if (isLoadingUser || isLoadingHome)
 		return (
 			<View style={defaultStyles.container}>
 				<Text style={{ color: colors.text }}>Loading...</Text>

@@ -6,6 +6,7 @@ function useUser() {
 		queryKey: ['user'],
 		queryFn: getCurrentUser,
 	})
+
 	return { isLoading, user }
 }
 
