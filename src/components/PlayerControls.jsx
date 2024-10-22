@@ -9,20 +9,26 @@ import { getInPremiumSongs } from '../utils/helpers'
 export const PlayerControls = ({ style, playlists }) => {
 	const activeTrack = useLastActiveTrack()
 
-	const { currentTrackId, setCurrentTrackId } = useQueue()
+	const { setCurrentTrackId, activeTab } = useQueue()
 	const filterSongs = getInPremiumSongs(playlists.song.items)
 
 	const currentIndex = filterSongs.findIndex((song) => song.encodeId === activeTrack?.encodeId)
 
-	const handleNextSong = () => {
-		if (currentIndex >= 0) {
+	const handleNextSong = async () => {
+		if (activeTab === 'favorite') {
+			await TrackPlayer.skipToNext()
+			await TrackPlayer.play()
+		} else if (currentIndex >= 0) {
 			const nextIndex = currentIndex + 1 === playlists.length ? 0 : currentIndex + 1
 
 			setCurrentTrackId(filterSongs?.[nextIndex]?.encodeId)
 		}
 	}
-	const handlePrevSong = () => {
-		if (currentIndex >= 0) {
+	const handlePrevSong = async () => {
+		if (activeTab === 'favorite') {
+			await TrackPlayer.skipToPrevious()
+			await TrackPlayer.play()
+		} else if (currentIndex >= 0) {
 			const prevIndex = currentIndex - 1 < 0 ? playlists.length - 1 : currentIndex - 1
 			setCurrentTrackId(filterSongs?.[prevIndex]?.encodeId)
 		}

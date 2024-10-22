@@ -1,4 +1,3 @@
-import { FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -6,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal'
 import { useActiveTrack } from 'react-native-track-player'
+import FavoriteButton from '../components/FavoriteButton'
 import Heading from '../components/Heading'
 import { MovingText } from '../components/MovingText'
 import { PlayerControls } from '../components/PlayerControls'
@@ -14,18 +14,28 @@ import { unknownTrackImageUri } from '../constants/images'
 import { colors, fontSize, screenPadding } from '../constants/tokens'
 import { getStringData } from '../hooks/useAsyncStorage'
 import { usePlayerBackground } from '../hooks/usePlayerBackground'
+import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite'
 import useDetailPlaylist from '../services/home/useDetailPlaylist'
-import { useQueue } from '../store/queue'
 import { defaultStyles } from '../styles'
 const safeToString = (value) => (value ? value.toString() : '')
 export default function PlayerScreen() {
-	const activeTrack = useActiveTrack() // Get the active track
-	const { activeQueueId } = useQueue() // Get the active queue ID
-	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlist ID
-	const [loading, setLoading] = useState(true) // State for loading status
 	const [isModalVisible, setModalVisible] = useState(false) // Modal visibility state
 	const navigation = useNavigation() // Hook for navigation
+	const activeTrack = useActiveTrack()
+	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlistsId
+	const [loading, setLoading] = useState(true)
+	// State to handle loading
 
+	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
+	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri)
+	const {
+		isFavorite,
+		isLoading: isLoadingFavorite,
+		isLoadingAdd,
+		toggleFavorite,
+		isLoadingRemove,
+	} = useTrackPlayerFavorite()
+	// Fetch playlistsId asynchronously
 	useEffect(() => {
 		// Fetch playlist ID asynchronously
 		const fetchPlaylistsId = async () => {
@@ -41,12 +51,6 @@ export default function PlayerScreen() {
 
 		fetchPlaylistsId()
 	}, [])
-
-	// Fetch playlist details using custom hook
-	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
-	// Fetch background image colors for player
-	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri)
-	const isFavorite = false // Placeholder for favorite state
 
 	if (loading || isLoadingPlaylist || !activeTrack) {
 		return (
@@ -125,12 +129,11 @@ export default function PlayerScreen() {
 											style={styles.trackTitleText}
 										/>
 									</View>
-									<FontAwesome
-										name={isFavorite ? 'heart' : 'heart-o'}
-										size={20}
-										color={isFavorite ? colors.primary : colors.icon}
-										style={{ marginHorizontal: 14 }}
-									/>
+									{isLoadingAdd || isLoadingRemove ? (
+										<ActivityIndicator />
+									) : (
+										<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
+									)}
 								</View>
 
 								{/* Artist names with click handler */}
