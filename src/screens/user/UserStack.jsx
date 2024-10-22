@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import ArtistProfile from '../ArtistProfile'
 import SearchScreen from '../SearchScreen'
 import UserScreen from './UserScreen'
 
@@ -25,14 +24,6 @@ export default function UserStack() {
 				options={{
 					headerShown: false,
 				}}
-			/>
-			<Stack.Screen
-				name="ArtistProfile"
-				component={ArtistProfile}
-				options={{
-					headerShown: false,
-				}}
-				initialParams={{ artistLink }} // Cho phép truyền ID nghệ sĩ
 			/>
 		</Stack.Navigator>
 	)

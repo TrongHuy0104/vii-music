@@ -4,7 +4,6 @@ import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
 import useUser from '../../services/auth/useUser'
 import { defaultStyles } from '../../styles'
-import ArtistProfile from '../ArtistProfile'
 
 export default function UserScreen() {
 	const { isLoading, user } = useUser()
@@ -12,7 +11,6 @@ export default function UserScreen() {
 	return (
 		<View style={defaultStyles.container}>
 			<Header title="Cá nhân" />
-			<ArtistProfile />
 		</View>
 	)
 }
