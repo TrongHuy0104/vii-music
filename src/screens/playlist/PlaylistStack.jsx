@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SearchScreen from '../SearchScreen'
 import PlaylistScreen from './PlaylistScreen'
-
 const Stack = createNativeStackNavigator()
 
 export default function PlaylistStack() {
@@ -25,6 +24,13 @@ export default function PlaylistStack() {
 					headerShown: false,
 				}}
 			/>
+			{/* <Stack.Screen
+				name="DownLoadSongList"
+				component={DownloadedSongsList}
+				options={{
+					headerShown: false,
+				}}
+			/> */}
 		</Stack.Navigator>
 	)
 }

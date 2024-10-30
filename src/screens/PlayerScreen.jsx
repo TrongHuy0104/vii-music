@@ -31,10 +31,13 @@ export default function PlayerScreen() {
 		toggleFavorite,
 		isLoadingRemove,
 	} = useTrackPlayerFavorite()
+	console.log(activeTrack);
 	// Fetch playlistsId asynchronously
 	useEffect(() => {
 		const fetchPlaylistsId = async () => {
 			try {
+
+
 				const id = await getStringData('playlistId')
 				setPlaylistsId(id)
 			} catch (error) {
