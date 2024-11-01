@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
+
 import HomePlaylist from './HomePlaylist'
 
 const { width } = Dimensions.get('window')
@@ -53,7 +54,8 @@ const HomeTabPlaylist = ({ navigation, playlists }) => {
 			</View>
 
 			{/* Playlist Section */}
-			<View style={styles.playlistContainer}>
+
+			<View>
 				{activePlaylist && (
 					<FlatList
 						data={activePlaylist.items}
@@ -102,11 +104,7 @@ const styles = StyleSheet.create({
 	activeTabText: {
 		color: '#24CEF0',
 	},
-	playlistContainer: {
-		flex: 2,
-		paddingLeft: 0,
-	},
-	flatListContent: {},
+	flatListContent: { height: 200 },
 	itemContainer: {
 		width: width / 2 - 16,
 	},

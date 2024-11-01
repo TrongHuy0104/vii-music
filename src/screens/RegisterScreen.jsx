@@ -17,7 +17,8 @@ import {
 
 export default function RegisterScreen() {
 	const navigation = useNavigation()
-	const { signUp, isLoading } = useSignUp()
+	const { signUp, isLoading: isLoadingSignUp } = useSignUp()
+	// const { createUser, isLoading: isLoadingCreateUser } = useCreateUser()
 	const [name, setName] = useState({ value: '', error: '' })
 	const [email, setEmail] = useState({ value: '', error: '' })
 	const [password, setPassword] = useState({ value: '', error: '' })
@@ -94,7 +95,7 @@ export default function RegisterScreen() {
 				secureTextEntry
 				placeHolder="Confirm Password"
 			/>
-			<Button title={`${isLoading ? 'Đang tải...' : 'Đăng ký'}`} onPress={onSignUpPressed} />
+			<Button title={`${isLoadingSignUp ? 'Đang tải...' : 'Đăng ký'}`} onPress={onSignUpPressed} />
 			<View style={styles.row}>
 				<Text style={{ color: colors.white }}>Bạn đã có tài khoản? </Text>
 				<TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Login')}>

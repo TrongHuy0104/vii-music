@@ -1,30 +1,35 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import BannerList from '../../components/BannerList'
-import useHome from '../../services/home/useHome'
-import { defaultStyles } from '../../styles'
-
 import Header from '../../components/Header'
 import { colors } from '../../constants/tokens'
+import useUser from '../../services/auth/useUser'
+import useHome from '../../services/home/useHome'
+import { defaultStyles } from '../../styles'
 import HomeTabPlaylist from './HomeTabPlaylist'
 
 export default function HomeScreen() {
-	const { isLoading, banners, playlists } = useHome()
+	const { isLoading: isLoadingHome, banners, playlists } = useHome()
+	const { isLoading: isLoadingUser } = useUser()
+
 	const navigation = useNavigation() // Access navigation object
 
-	if (isLoading)
+	if (isLoadingUser || isLoadingHome)
 		return (
-			<View style={defaultStyles.container}>
-				<Text style={{ color: colors.text }}>Loading...</Text>
+			<View style={[defaultStyles.container, { justifyContent: 'center' }]}>
+				<ActivityIndicator color={colors.icon} />
 			</View>
 		)
 
 	return (
 		<View style={defaultStyles.container}>
 			<Header title="Trang chủ" />
-			<BannerList navigation={navigation} banners={banners} />
-			<HomeTabPlaylist navigation={navigation} playlists={playlists} />
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<BannerList navigation={navigation} banners={banners} />
+				<HomeTabPlaylist navigation={navigation} playlists={playlists} />
+			</ScrollView>
 		</View>
 	)
 }

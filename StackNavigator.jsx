@@ -7,12 +7,12 @@ import { Platform, StyleSheet, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { FloatingPlayer } from './src/components/FloatingPlayer'
 import { colors, fontSize } from './src/constants/tokens'
+import FavoriteStack from './src/screens/favorite/FavoriteStack'
 import HomeStack from './src/screens/home/HomeStack'
 import LoginScreen from './src/screens/LoginScreen'
 import PlayerScreen from './src/screens/PlayerScreen'
 import PlaylistStack from './src/screens/playlist/PlaylistStack'
 import RegisterScreen from './src/screens/RegisterScreen'
-import SongStack from './src/screens/song/SongStack'
 import UserStack from './src/screens/user/UserStack'
 import { useAuth } from './src/services/auth/useAuth'
 import { navigationRef } from './src/utils/rootNavigation'
@@ -84,14 +84,12 @@ function BottomTabs() {
 					}}
 				/>
 				<Tab.Screen
-					name="song"
-					component={SongStack}
+					name="favorite"
+					component={FavoriteStack}
 					options={{
-						tabBarLabel: 'Bài hát',
+						tabBarLabel: 'Yêu thích',
 						headerShown: false,
-						tabBarIcon: ({ color }) => (
-							<Ionicons name="musical-notes-sharp" size={24} color={color} />
-						),
+						tabBarIcon: ({ color }) => <Ionicons name="heart" size={24} color={color} />,
 					}}
 				/>
 				<Tab.Screen
@@ -149,8 +147,30 @@ function Navigation() {
 							options={{ headerShown: false }}
 						/>
 						<Stack.Screen
+							name="Login"
+							component={() => (
+								<SafeAreaWrapper safeArea={false}>
+									<LoginScreen />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="Register"
+							component={() => (
+								<SafeAreaWrapper safeArea={false}>
+									<RegisterScreen />
+								</SafeAreaWrapper>
+							)}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
 							name="Player"
-							component={PlayerScreen}
+							component={() => (
+								<SafeAreaWrapper>
+									<PlayerScreen />
+								</SafeAreaWrapper>
+							)}
 							options={{
 								headerShown: false,
 								presentation: 'modal', // For modal-like behavior

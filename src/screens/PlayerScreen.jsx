@@ -1,9 +1,9 @@
-import { FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { useActiveTrack } from 'react-native-track-player'
+import FavoriteButton from '../components/FavoriteButton'
 import Heading from '../components/Heading'
 import { MovingText } from '../components/MovingText'
 import { PlayerControls } from '../components/PlayerControls'
@@ -12,16 +12,25 @@ import { unknownTrackImageUri } from '../constants/images'
 import { colors, fontSize, screenPadding } from '../constants/tokens'
 import { getStringData } from '../hooks/useAsyncStorage'
 import { usePlayerBackground } from '../hooks/usePlayerBackground'
+import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite'
 import useDetailPlaylist from '../services/home/useDetailPlaylist'
-import { useQueue } from '../store/queue'
 import { defaultStyles } from '../styles'
 
 export default function PlayerScreen() {
 	const activeTrack = useActiveTrack()
-	const { activeQueueId } = useQueue()
 	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlistsId
-	const [loading, setLoading] = useState(true) // State to handle loading
+	const [loading, setLoading] = useState(true)
+	// State to handle loading
 
+	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
+	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri)
+	const {
+		isFavorite,
+		isLoading: isLoadingFavorite,
+		isLoadingAdd,
+		toggleFavorite,
+		isLoadingRemove,
+	} = useTrackPlayerFavorite()
 	// Fetch playlistsId asynchronously
 	useEffect(() => {
 		const fetchPlaylistsId = async () => {
@@ -37,10 +46,6 @@ export default function PlayerScreen() {
 
 		fetchPlaylistsId()
 	}, [])
-
-	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
-	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri)
-	const isFavorite = false
 
 	if (loading || isLoadingPlaylist || !activeTrack) {
 		return (
@@ -86,12 +91,11 @@ export default function PlayerScreen() {
 										style={styles.trackTitleText}
 									/>
 								</View>
-								<FontAwesome
-									name={isFavorite ? 'heart' : 'heart-o'}
-									size={20}
-									color={isFavorite ? colors.primary : colors.icon}
-									style={{ marginHorizontal: 14 }}
-								/>
+								{isLoadingAdd || isLoadingRemove ? (
+									<ActivityIndicator />
+								) : (
+									<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
+								)}
 							</View>
 							{activeTrack.artistsNames && (
 								<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>

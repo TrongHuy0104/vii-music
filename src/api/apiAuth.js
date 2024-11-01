@@ -31,6 +31,17 @@ export async function signUp({ email, password, fullName }) {
 		throw new Error(error.message)
 	}
 
+	const { error2 } = await supabase.from('User').insert([
+		{
+			email: data.user.user_metadata.email,
+			name: data.user.user_metadata.fullName,
+			authId: data.user.user_metadata.sub,
+		},
+	])
+	if (error2) {
+		console.error(error2)
+		throw new Error(error2.message)
+	}
 	return data
 }
 
@@ -49,4 +60,12 @@ export async function getCurrentUser() {
 	}
 
 	return user
+}
+
+export async function logout() {
+	let { error } = await supabase.auth.signOut()
+	if (error) {
+		console.error(error)
+		throw new Error(error.message)
+	}
 }
