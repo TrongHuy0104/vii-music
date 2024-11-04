@@ -1,9 +1,12 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
+
 import Toast from 'react-native-toast-message';
 import { useActiveTrack } from 'react-native-track-player';
 import FavoriteButton from '../components/FavoriteButton';
@@ -18,9 +21,14 @@ import { usePlayerBackground } from '../hooks/usePlayerBackground';
 import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite';
 import useDetailPlaylist from '../services/home/useDetailPlaylist';
 import { defaultStyles } from '../styles';
+const safeToString = (value) => (value ? value.toString() : '')
 
 export default function PlayerScreen() {
+	const [isModalVisible, setModalVisible] = useState(false) // Modal visibility state
+	const navigation = useNavigation() // Hook for navigation
 	const activeTrack = useActiveTrack();
+	console.log(activeTrack);
+
 	const [playlistsId, setPlaylistsId] = useState(null);
 	const [loading, setLoading] = useState(true);
 
@@ -35,6 +43,7 @@ export default function PlayerScreen() {
 	} = useTrackPlayerFavorite();
 
 	useEffect(() => {
+		// Fetch playlist ID asynchronously
 		const fetchPlaylistsId = async () => {
 			try {
 				const id = await getStringData('playlistId');
@@ -160,41 +169,81 @@ export default function PlayerScreen() {
 		);
 	}
 
+	// Function to handle artist click
+	const handleArtistClick = () => {
+		// Check if there is more than one artist
+		if (activeTrack.artists.length > 1) {
+			setModalVisible(true) // Show the modal for multiple artists
+		} else if (activeTrack.artists.length === 1) {
+			// If there's only one artist, navigate directly
+			navigateToArtistProfile(activeTrack.artists[0].link)
+		} else {
+			// Handle case where there are no artists (just in case)
+			console.error('No artists available for this track.')
+		}
+	}
+
+	const navigateToArtistProfile = (artistLink) => {
+		console.log('Navigating to artist profile:', artistLink)
+
+		// Check if the link contains '/nghe-si/', if yes, remove that part; otherwise, keep it as is
+		const artistName = artistLink.includes('/nghe-si/')
+			? artistLink.replace('/nghe-si/', '') // Remove '/nghe-si/' if present
+			: artistLink.replace('/', '') // Remove leading '/' if present
+
+		navigation.navigate('ArtistProfile', { artistName })
+	}
+	const artistNamess = activeTrack?.artists
+		? activeTrack.artists.map((artist) => safeToString(artist.name)).join(', ')
+		: 'Nghệ sĩ chưa được cập nhật'
+	console.log("artistNamess", activeTrack.artistsNames);
+
+	// Shorten the artist names for display if too long
+	const displayArtistNames =
+		artistNamess.length > 30 ? `${artistNamess.substring(0, 30)}...` : artistNamess
+
 	return (
-		<LinearGradient
-			style={{ flex: 1 }}
-			colors={
-				bgImgColors
-					? [bgImgColors?.dominant, bgImgColors?.lightVibrant]
-					: [colors.background, colors.primary]
-			}
-		>
-			<View style={styles.overlayContainer}>
-				<Heading title="Trình phát nhạc" />
-				<View style={styles.artworkImageContainer}>
-					<Image
-						style={{ ...styles.artworkImage }}
-						source={activeTrack.thumbnailM}
-						placeholder={unknownTrackImageUri}
-						contentFit="cover"
-					/>
-				</View>
-				<View style={{ flex: 1 }}>
-					<View style={{ marginVertical: 'auto' }}>
-						<View style={{ height: 60 }}>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									alignItems: 'center',
-								}}
-							>
-								<View style={styles.trackTitleContainer}>
-									<MovingText
-										text={activeTrack.title ?? ''}
-										animationThreshold={30}
-										style={styles.trackTitleText}
-									/>
+		<View style={{ flex: 1 }}>
+			<LinearGradient
+				style={{ flex: 1 }}
+				colors={
+					bgImgColors
+						? [bgImgColors?.dominant, bgImgColors?.lightVibrant]
+						: [colors.background, colors.primary]
+				}
+			>
+				<View style={styles.overlayContainer}>
+					<Heading title="Trình phát nhạc" />
+					<View style={styles.artworkImageContainer}>
+						<Image
+							style={{ ...styles.artworkImage }}
+							source={activeTrack.thumbnailM}
+							placeholder={unknownTrackImageUri}
+							contentFit="cover"
+						/>
+					</View>
+					<View style={{ flex: 1 }}>
+						<View style={{ marginVertical: 'auto' }}>
+							<View style={{ height: 60 }}>
+								<View
+									style={{
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										alignItems: 'center',
+									}}
+								>
+									<View style={styles.trackTitleContainer}>
+										<MovingText
+											text={activeTrack.title ?? ''}
+											animationThreshold={30}
+											style={styles.trackTitleText}
+										/>
+									</View>
+									{isLoadingAdd || isLoadingRemove ? (
+										<ActivityIndicator />
+									) : (
+										<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
+									)}
 								</View>
 								{isLoadingAdd || isLoadingRemove ? (
 									<ActivityIndicator />
@@ -205,18 +254,53 @@ export default function PlayerScreen() {
 									<FontAwesome name="download" size={24} color={colors.icon} />
 								</TouchableOpacity>
 							</View>
-							{activeTrack.artistsNames && (
-								<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
-									{activeTrack.artistsNames}
+							{/* Artist names with click handler */}
+							<TouchableOpacity onPress={handleArtistClick}>
+								<Text style={[styles.trackArtistText, { marginTop: 6 }]}>
+									{displayArtistNames}
 								</Text>
-							)}
+							</TouchableOpacity>
+
+							{/* Modal to display multiple artists */}
+							<Modal
+								isVisible={isModalVisible}
+								onSwipeComplete={() => setModalVisible(false)} // Close modal when swiped down
+								swipeDirection="down" // Allow swipe down gesture
+								style={styles.modalContainer} // Align modal at the bottom
+								onBackdropPress={() => setModalVisible(false)}
+								backdropOpacity={0.3} // Dim the background
+							>
+								<View style={styles.modalContent}>
+									<Text style={styles.modalTitle}>Nghệ sĩ</Text>
+									<FlatList
+										data={activeTrack.artists}
+										keyExtractor={(item) => item.id}
+										renderItem={({ item }) => (
+											<TouchableOpacity
+												style={styles.artistContainer}
+												onPress={() => {
+													navigateToArtistProfile(item.link)
+													setModalVisible(false)
+												}}
+											>
+												<Image source={{ uri: item.thumbnailM }} style={styles.artistImage} />
+												<View style={styles.artistInfo}>
+													<Text style={styles.artistName}>{item.name}</Text>
+													<Text style={styles.artistFollowers}>quan tâm</Text>
+												</View>
+											</TouchableOpacity>
+										)}
+									/>
+								</View>
+							</Modal>
+							<PlayerControls style={{ marginTop: 40 }} playlists={playlists} />
+							<PlayerProgressBar activeTrack={activeTrack} style={{ marginTop: 40 }} />
 						</View>
-						<PlayerControls style={{ marginTop: 40 }} playlists={playlists} />
-						<PlayerProgressBar activeTrack={activeTrack} style={{ marginTop: 40 }} />
 					</View>
 				</View>
-			</View>
-		</LinearGradient>
+
+			</LinearGradient >
+		</View>
 	);
 }
 
@@ -259,9 +343,50 @@ const styles = StyleSheet.create({
 		fontSize: fontSize.base,
 		opacity: 0.8,
 		maxWidth: '90%',
+	}, modalContainer: {
+		justifyContent: 'flex-end', // Position modal at the bottom
+		margin: 0, // No margin around modal
+	},
+	modalContent: {
+		backgroundColor: '#fff',
+		borderRadius: 10,
+		padding: 20,
+		width: '100%',
+	},
+	modalTitle: {
+		fontSize: 20,
+		fontWeight: 'bold',
+		marginBottom: 20,
+	},
+	artistContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 15,
+	},
+	artistImage: {
+		width: 50,
+		height: 50,
+		borderRadius: 25,
+		marginRight: 15,
+	},
+	artistInfo: {
+		flex: 1,
+	},
+	artistName: {
+		fontSize: 18,
+		fontWeight: 'bold',
+	},
+	artistFollowers: {
+		fontSize: 14,
+		color: '#666',
+	},
+	closeButton: {
+		marginTop: 20,
+		fontSize: 16,
+		color: '#007BFF',
+		textAlign: 'center',
 	},
 });
-
 // import { FontAwesome } from '@expo/vector-icons';
 // import { Image } from 'expo-image';
 // import { LinearGradient } from 'expo-linear-gradient';
@@ -478,3 +603,4 @@ const styles = StyleSheet.create({
 // 		maxWidth: '90%',
 // 	},
 // });
+

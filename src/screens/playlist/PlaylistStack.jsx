@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import ArtistProfile from '../ArtistProfile'
 import SearchScreen from '../SearchScreen'
 import PlaylistScreen from './PlaylistScreen'
 const Stack = createNativeStackNavigator()
@@ -31,6 +32,13 @@ export default function PlaylistStack() {
 					headerShown: false,
 				}}
 			/> */}
+			<Stack.Screen
+				name="ArtistProfile"
+				component={ArtistProfile}
+				options={{
+					headerShown: false,
+				}}
+			/>
 		</Stack.Navigator>
 	)
 }
