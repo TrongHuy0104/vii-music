@@ -348,7 +348,7 @@ export default function DownloadedSongsList() {
           <DownloadListItem track={item} onTrackSelect={() => handleTrackSelect(index)} />
         )}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingTop: 10, paddingBottom: 150 }}
+        contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
       />
     </View>
   );

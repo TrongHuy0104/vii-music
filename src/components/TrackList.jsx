@@ -40,7 +40,7 @@ export default function TrackList({ scrollEnabled, songs, id }) {
 				<TrackListItem track={track} onTrackSelect={handleTrackSelect} />
 			)}
 			keyExtractor={(item) => item.encodeId}
-			contentContainerStyle={{ paddingTop: 10, paddingBottom: 60 }}
+			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
 		/>
 	)
 }
