@@ -5,8 +5,5 @@
         "source.fixAll": "always",
         "source.organizeImports": "always"
     },
-    "editor.wordWrap": "on",
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
+    "editor.wordWrap": "on"
 }

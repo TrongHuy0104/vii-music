@@ -65,22 +65,3 @@ export async function getSongAudio(pId) {
 
 	return { songAudio }
 }
-
-export async function getDetailArtist(artistName) {
-	try {
-		const response = await axios.get('/artist', {
-			params: { name: artistName },
-		})
-
-		// Kiểm tra mã trạng thái HTTP
-		if (response.status !== 200) {
-			throw new Error('Failed getting artist profile data')
-		}
-
-		// Trả về dữ liệu thực từ API (response.data.data)
-		return response.data
-	} catch (error) {
-		console.error('Error fetching artist data:', error.message)
-		throw error
-	}
-}
