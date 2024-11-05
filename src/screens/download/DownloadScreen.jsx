@@ -2,13 +2,13 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import Header from '../../components/Header'
 import { defaultStyles } from '../../styles'
-import FavoritePlaylist from '../favorite/FavoritePlaylist'
+import DownloadedSongsList from './DownloadedSongsList'
 
-export default function PlaylistScreen() {
+export default function DownloadScreen() {
 	return (
 		<View style={defaultStyles.container}>
 			<Header title="Playlist" />
-			<FavoritePlaylist />
+			<DownloadedSongsList />
 		</View>
 	)
 }
