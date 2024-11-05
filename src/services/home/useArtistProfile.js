@@ -4,7 +4,7 @@ import { getDetailArtist } from '../../api/index'
 function useArtistProfile(artistName) {
 	const { isLoading: isLoadingArtist, data } = useQuery({
 		queryKey: ['artist', artistName],
-		queryFn: () => getDetailArtist('Tien-Tien'), // Gọi hàm getDetailArtist
+		queryFn: () => getDetailArtist(artistName), // Gọi hàm getDetailArtist
 	})
 
 	// Lấy dữ liệu nghệ sĩ từ response

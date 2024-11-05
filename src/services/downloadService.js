@@ -12,7 +12,7 @@ export async function downloadSong() {
 
 			// Gọi hàm gửi thông báo khi tải về thành công
 			sendDownloadSuccessNotification()
-		}, 3000) // Thời gian tải giả lập 3 giây
+		}, 1000) // Thời gian tải giả lập 3 giây
 	} catch (error) {
 		console.error('Lỗi khi tải nhạc:', error)
 	}

@@ -45,7 +45,6 @@ const App = () => {
 	}, [])
 
 	useEffect(() => {
-		// Tạo Notification Channel cho Android
 		PushNotification.createChannel(
 			{
 				channelId: 'download-channel',
@@ -54,14 +53,6 @@ const App = () => {
 			},
 			(created) => console.log(`createChannel returned '${created}'`),
 		)
-
-		return () => {
-			try {
-				TrackPlayer.reset()
-			} catch (error) {
-				console.log(error)
-			}
-		}
 	}, [])
 
 	return (

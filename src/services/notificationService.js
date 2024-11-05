@@ -1,11 +1,10 @@
-// src/services/notificationService.js
 import PushNotification from 'react-native-push-notification'
 
 // Hàm gửi thông báo tải xuống thành công
-export function sendDownloadSuccessNotification() {
+export function sendDownloadSuccessNotification(trackTitle) {
 	PushNotification.localNotification({
-		channelId: 'download-channel', // Đảm bảo rằng channel này đã được tạo
+		channelId: 'download-channel', // Đảm bảo rằng channel này đã được tạo trong App.js
 		title: 'Tải xuống hoàn tất',
-		message: 'Bài hát của bạn đã được tải xuống thành công!',
+		message: `${trackTitle} đã được tải xuống thành công!`,
 	})
 }

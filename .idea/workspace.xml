@@ -5,11 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="342cd414-a99e-4851-bf1d-7718c1766f9b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/api/apiPlaylist.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreatePlaylistModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/FavoritePlaylistModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/UserPlaylist.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/.PlayerScreen.jsx.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/ArtistProfile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/download/AudioContext.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/download/DownloadList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/download/DownloadListItem.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/download/DownloadedSongsList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/favorite/FavoritePlaylist.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/screens/favorite/UserSongList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/download/downloadService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/eventEmitter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/%ProgramData%/Microsoft/Windows/UUS/State/_active.uusver" beforeDir="false" afterPath="$PROJECT_DIR$/%ProgramData%/Microsoft/Windows/UUS/State/_active.uusver" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/user/UserScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/user/UserScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ArtistProfile.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PlaylistThumb.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlaylistThumb.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TrackList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TrackList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useSetupTrackPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useSetupTrackPlayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/PlayerScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/PlayerScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/favorite/FavoriteScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/favorite/FavoriteScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/favorite/FavoriteStack.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/favorite/FavoriteStack.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/home/HomeStack.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/home/HomeStack.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/home/SongListScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/home/SongListScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/playlist/PlaylistScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/playlist/PlaylistScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/playlist/PlaylistStack.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/playlist/PlaylistStack.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/downloadService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/downloadService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/home/useArtistProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/home/useArtistProfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/home/useSongInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/home/useSongInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/notificationService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/notificationService.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +70,7 @@
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;notifications&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging notifications&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
