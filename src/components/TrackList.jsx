@@ -16,7 +16,9 @@ export default function TrackList({ scrollEnabled, songs, id }) {
 		setActiveTab('home')
 		setActiveQueueId(id)
 		setCurrentTrackId(selectedTrack.encodeId)
-		if (id) storeStringData(id, 'playlistId')
+		console.log("Tracklist playlistid: ", id);
+		// storeStringData(JSON.stringify(id), 'playlistId');
+		storeStringData(id, 'playlistId');
 		// if (activeTrack && activeTrack?.encodeId === selectedTrack.encodeId) return
 		// const trackIndex = songs.findIndex((track) => track.encodeId === selectedTrack.encodeId)
 		// const selectedAudio = await getSongAudio(songs[index])
