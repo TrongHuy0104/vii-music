@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "797343625825",
+    "project_id": "noti-409e2",
+    "storage_bucket": "noti-409e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797343625825:android:00bbcb361ad34738b7f020",
+        "android_client_info": {
+          "package_name": "com.music.player"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOJDm9PtTlJ-DLujvFAPEx0AdEVbVh8EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
