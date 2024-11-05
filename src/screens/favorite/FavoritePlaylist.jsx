@@ -1,24 +1,19 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View } from 'react-native';
-import { defaultStyles } from '../../styles';
-import Header from '../../components/Header';
 import UserPlaylist from '../../components/UserPlaylist';
-import Heading from '../../components/Heading';
 
-const FavoritePlaylist = ({ navigation }) => {
 
-  // Function to handle selecting a playlist and navigating to the UserSongList screen
+const FavoritePlaylist = () => {
+  const navigation = useNavigation();
+  // Function to handle selecting a playlist and navigating to the PlaylistScreen
   const handleSelectPlaylist = (playlist) => {
-    console.log('FavoritePlaylist: ',playlist.id);
-    
+    console.log('FavoritePlaylist: ', playlist.id);
+
     navigation.navigate('UserSongList', { playlistId: playlist.id });
   };
 
   return (
-    <View style={defaultStyles.container}>
-      <Heading title="Danh Sách Playlist" />
-      <UserPlaylist onSelectPlaylist={handleSelectPlaylist} />
-    </View>
+    <UserPlaylist onSelectPlaylist={handleSelectPlaylist} />
   );
 };
 
