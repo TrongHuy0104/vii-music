@@ -5,7 +5,8 @@ import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import { useActiveTrack } from 'react-native-track-player';
 import { addSongToPlaylist } from '../api/apiPlaylist';
@@ -28,6 +29,9 @@ const safeToString = (value) => (value ? value.toString() : '')
 
 export default function PlayerScreen() {
 	const [isModalVisible, setModalVisible] = useState(false) // Modal visibility state
+	const [isModalVisibleArtist, setModalVisibleArtist] = useState(false) // Modal visibility state
+
+
 	const navigation = useNavigation() // Hook for navigation
 	const {
 		isFavorite,
@@ -135,7 +139,7 @@ export default function PlayerScreen() {
 	const handleArtistClick = () => {
 		// Check if there is more than one artist
 		if (activeTrack.artists.length > 1) {
-			setModalVisible(true) // Show the modal for multiple artists
+			setModalVisibleArtist(true) // Show the modal for multiple artists
 		} else if (activeTrack.artists.length === 1) {
 			// If there's only one artist, navigate directly
 			navigateToArtistProfile(activeTrack.artists[0].link)
@@ -209,7 +213,11 @@ export default function PlayerScreen() {
 									<TouchableOpacity onPress={() => handleDownload()} style={styles.downloadButton}>
 										<FontAwesome name="download" size={24} color={colors.icon} />
 									</TouchableOpacity>
-									<MaterialCommunityIcons name="music-note-plus" size={24} color={colors.icon} onPress={openModal} />
+
+									<TouchableOpacity onPress={openModal}>
+										<MaterialCommunityIcons name="music-note-plus" size={24} color={colors.icon} />
+									</TouchableOpacity>
+
 								</View>
 
 								{activeTrack.artistsNames && (
@@ -235,6 +243,38 @@ export default function PlayerScreen() {
 					playlists={playlists}
 					onAddSongToPlaylist={handleAddSongToPlaylist}
 				/>
+				{/* Modal to display multiple artists */}
+				<Modal
+					isVisible={isModalVisibleArtist}
+					onSwipeComplete={() => setModalVisibleArtist(false)} // Close modal when swiped down
+					swipeDirection="down" // Allow swipe down gesture
+					style={styles.modalContainer} // Align modal at the bottom
+					onBackdropPress={() => setModalVisibleArtist(false)}
+					backdropOpacity={0.3} // Dim the background
+				>
+					<View style={styles.modalContent}>
+						<Text style={styles.modalTitle}>Nghệ sĩ</Text>
+						<FlatList
+							data={activeTrack.artists}
+							keyExtractor={(item) => item.id}
+							renderItem={({ item }) => (
+								<TouchableOpacity
+									style={styles.artistContainer}
+									onPress={() => {
+										navigateToArtistProfile(item.link)
+										setModalVisibleArtist(false)
+									}}
+								>
+									<Image source={{ uri: item.thumbnailM }} style={styles.artistImage} />
+									<View style={styles.artistInfo}>
+										<Text style={styles.artistName}>{item.name}</Text>
+										<Text style={styles.artistFollowers}>quan tâm</Text>
+									</View>
+								</TouchableOpacity>
+							)}
+						/>
+					</View>
+				</Modal>
 			</LinearGradient >
 
 		</View >
