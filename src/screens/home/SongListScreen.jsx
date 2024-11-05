@@ -1,9 +1,10 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import Heading from '../../components/Heading'
 import PlaylistThumb from '../../components/PlaylistThumb'
 import TrackList from '../../components/TrackList'
-import { screenPadding } from '../../constants/tokens'
+import { colors, screenPadding } from '../../constants/tokens'
 import useDetailPlaylist from '../../services/home/useDetailPlaylist'
 import { defaultStyles } from '../../styles'
 import { getInPremiumSongs, getInPremiumSongsDuration } from '../../utils/helpers'
@@ -46,13 +47,12 @@ import { getInPremiumSongs, getInPremiumSongsDuration } from '../../utils/helper
 // })
 export default function SongListScreen({ route }) {
 	const { encodeId } = route.params
-
 	const { isLoadingPlaylist, playlists } = useDetailPlaylist(encodeId)
 
 	if (isLoadingPlaylist)
 		return (
-			<View style={styles.container}>
-				<Text>Loading...</Text>
+			<View style={[defaultStyles.container, { justifyContent: 'center' }]}>
+				<ActivityIndicator color={colors.icon} />
 			</View>
 		)
 

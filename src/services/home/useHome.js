@@ -6,6 +6,7 @@ function useHome() {
 		queryKey: ['home'],
 		queryFn: getHome,
 	})
+
 	const banners = data?.data?.data?.items?.find((item) => item.sectionType === 'banner')?.items
 
 	const playlists = data?.data?.data?.items?.filter((item) => item.sectionType === 'playlist') || []

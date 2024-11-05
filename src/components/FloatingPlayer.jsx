@@ -17,7 +17,7 @@ import { PlayPauseButton, SkipToNextButton } from './PlayerControls'
 export const FloatingPlayer = () => {
 	const activeTrack = useActiveTrack()
 	const lastActiveTrack = useLastActiveTrack()
-	const { currentTrackId, setCurrentTrackId } = useQueue()
+	const { currentTrackId, setCurrentTrackId, activeTab } = useQueue()
 	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlistsId
 	const [loading, setLoading] = useState(true) // State to handle loading
 
@@ -41,14 +41,22 @@ export const FloatingPlayer = () => {
 	const { songInfo, isLoadingSongInfo, song: songAudio } = useSongInfo()
 	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId)
 
-	const handleNextSong = () => {
-		const filterSongs = getInPremiumSongs(playlists.song.items)
+	const handleNextSong = async () => {
+		if (activeTab === 'favorite') {
+			await TrackPlayer.skipToNext()
+			await TrackPlayer.play()
+		} else {
+			const filterSongs = getInPremiumSongs(playlists.song.items)
 
-		const currentIndex = filterSongs.findIndex((song) => song.encodeId === displayedTrack?.encodeId)
-		if (currentIndex >= 0) {
-			const nextIndex = currentIndex + 1 === playlists.length ? 0 : currentIndex + 1
+			const currentIndex = filterSongs.findIndex(
+				(song) => song.encodeId === displayedTrack?.encodeId,
+			)
 
-			setCurrentTrackId(filterSongs?.[nextIndex]?.encodeId)
+			if (currentIndex >= 0) {
+				const nextIndex = currentIndex + 1 === playlists.length ? 0 : currentIndex + 1
+
+				setCurrentTrackId(filterSongs?.[nextIndex]?.encodeId)
+			}
 		}
 	}
 
@@ -60,14 +68,19 @@ export const FloatingPlayer = () => {
 		const fetchData = async () => {
 			if (loading || isLoadingSongInfo || isLoadingPlaylist) return
 
-			await TrackPlayer.pause()
 			await TrackPlayer.load({ ...songInfo.data, url: songAudio.data[128] })
-			// if (currentTrackId) {
 			await TrackPlayer.play()
-			// }
 		}
-		fetchData()
-	}, [isLoadingSongInfo, isLoadingPlaylist, songAudio, songInfo, currentTrackId])
+		activeTab !== 'favorite' && fetchData()
+	}, [
+		isLoadingSongInfo,
+		isLoadingPlaylist,
+		songAudio,
+		songInfo,
+		currentTrackId,
+		activeTab,
+		loading,
+	])
 
 	if (!displayedTrack) return null
 
@@ -82,7 +95,6 @@ export const FloatingPlayer = () => {
 					transition={1000}
 				/>
 				<View style={styles.trackTitleContainer}>
-					{/* <Text style={styles.trackTitle}>{displayedTrack.title}</Text> */}
 					<MovingText
 						style={styles.trackTitle}
 						text={displayedTrack.title}

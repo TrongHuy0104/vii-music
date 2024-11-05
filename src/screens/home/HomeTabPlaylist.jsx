@@ -55,7 +55,7 @@ const HomeTabPlaylist = ({ navigation, playlists }) => {
 
 			{/* Playlist Section */}
 
-			<View style={styles.playlistContainer}>
+			<View>
 				{activePlaylist && (
 					<FlatList
 						data={activePlaylist.items}
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
 	activeTabText: {
 		color: '#24CEF0',
 	},
-	playlistContainer: {},
 	flatListContent: { height: 200 },
 	itemContainer: {
 		width: width / 2 - 16,

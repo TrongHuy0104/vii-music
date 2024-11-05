@@ -1,6 +1,5 @@
 import React from 'react'
 import { FlatList, View } from 'react-native'
-import { useActiveTrack } from 'react-native-track-player'
 import { storeStringData } from '../hooks/useAsyncStorage'
 import { useQueue } from '../store/queue'
 import { utilsStyles } from '../styles'
@@ -11,13 +10,13 @@ const ItemDivider = () => (
 )
 
 export default function TrackList({ scrollEnabled, songs, id }) {
-	const activeTrack = useActiveTrack()
-	const { activeQueueId, setActiveQueueId, setCurrentTrackId } = useQueue()
+	const { setActiveQueueId, setCurrentTrackId, setActiveTab } = useQueue()
 
 	const handleTrackSelect = async (selectedTrack) => {
+		setActiveTab('home')
 		setActiveQueueId(id)
 		setCurrentTrackId(selectedTrack.encodeId)
-		console.log("Tracklist playlistid: ",id);
+		console.log("Tracklist playlistid: ", id);
 		// storeStringData(JSON.stringify(id), 'playlistId');
 		storeStringData(id, 'playlistId');
 		// if (activeTrack && activeTrack?.encodeId === selectedTrack.encodeId) return
@@ -41,7 +40,7 @@ export default function TrackList({ scrollEnabled, songs, id }) {
 				<TrackListItem track={track} onTrackSelect={handleTrackSelect} />
 			)}
 			keyExtractor={(item) => item.encodeId}
-			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
+			contentContainerStyle={{ paddingTop: 10, paddingBottom: 60 }}
 		/>
 	)
 }
