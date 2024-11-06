@@ -100,7 +100,7 @@ function BottomTabs() {
 						tabBarLabel: 'Download',
 						headerShown: false,
 						tabBarIcon: ({ color }) => (
-							<MaterialCommunityIcons name="playlist-play" size={28} color={color} />
+							<MaterialCommunityIcons name="download-outline" size={28} color={color} />
 						),
 					}}
 				/>

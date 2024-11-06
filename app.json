@@ -30,6 +30,7 @@
         "backgroundColor": "#151521"
       },
       "package": "com.music.player",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE",

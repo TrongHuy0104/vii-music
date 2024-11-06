@@ -7,7 +7,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-toast-message';
 import { useActiveTrack } from 'react-native-track-player';
 import { addSongToPlaylist } from '../api/apiPlaylist';
 import FavoriteButton from '../components/FavoriteButton';
@@ -22,6 +21,7 @@ import { getStringData } from '../hooks/useAsyncStorage';
 import { usePlayerBackground } from '../hooks/usePlayerBackground';
 import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite';
 import useDetailPlaylist from '../services/home/useDetailPlaylist';
+import { sendDownloadSuccessNotification } from '../services/notificationService';
 import { useQueue } from '../store/queue';
 import { defaultStyles } from '../styles';
 import { downloadEventEmitter } from '../utils/eventEmitter';
@@ -111,21 +111,24 @@ export default function PlayerScreen() {
 
 			// Emit the event to refresh the downloaded songs list
 			downloadEventEmitter.emit('downloadComplete');
+			sendDownloadSuccessNotification(activeTrack.title);
 
-			Toast.show({
-				type: 'success',
-				text1: 'Download Complete',
-				text2: 'Track and metadata saved successfully!',
-			});
 		} catch (error) {
 			console.error('Error downloading:', error);
-			Toast.show({
-				type: 'error',
-				text1: 'Download Error',
-				text2: 'An error occurred while downloading the track or metadata.',
+			// Toast.show({
+			// 	type: 'error',
+			// 	text1: 'Download Error',
+			// 	text2: 'An error occurred while downloading the track or metadata.',
+			// });
+			PushNotification.localNotification({
+				channelId: "download-channel", // Đảm bảo channel này đã được tạo
+				title: "Lỗi tải xuống",
+				message: "Đã xảy ra lỗi khi tải bài hát. Vui lòng thử lại.",
 			});
 		}
 	};
+	console.log("activeTrack", activeTrack);
+
 
 	if (loading || isLoadingPlaylist || !activeTrack) {
 		return (
@@ -161,11 +164,11 @@ export default function PlayerScreen() {
 	}
 	const artistNamess = activeTrack?.artists
 		? activeTrack.artists.map((artist) => safeToString(artist.name)).join(', ')
-		: 'Nghệ sĩ chưa được cập nhật'
+		: activeTrack.artistsNames
 
 	// Shorten the artist names for display if too long
 	const displayArtistNames =
-		artistNamess.length > 30 ? `${artistNamess.substring(0, 30)}...` : artistNamess
+		artistNamess?.length > 30 ? `${artistNamess.substring(0, 30)}...` : artistNamess
 
 	return (
 		<View style={{ flex: 1 }}>
