@@ -7,7 +7,7 @@ import DownloadedSongsList from './DownloadedSongsList'
 export default function DownloadScreen() {
 	return (
 		<View style={defaultStyles.container}>
-			<Header title="Playlist" />
+			<Header title="Đã lưu" />
 			<DownloadedSongsList />
 		</View>
 	)

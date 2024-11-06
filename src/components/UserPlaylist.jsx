@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import { getUserPlaylists, getSongsInPlaylist, getSongDetails } from '../api/apiPlaylist'
-import { colors, fontSize, fontWeight } from '../constants/tokens'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { getSongDetails, getSongsInPlaylist, getUserPlaylists } from '../api/apiPlaylist'
 import { unknownTrackImageUri } from '../constants/images'
+import { colors, fontSize, fontWeight } from '../constants/tokens'
 
 const UserPlaylist = ({ onSelectPlaylist }) => {
   const [playlists, setPlaylists] = useState([])
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.2,
     // shadowRadius: 4,
     // elevation: 3,
-    
-    
+
+
   },
   thumbnailContainer: {
     width: 60,

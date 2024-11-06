@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SplashScreen } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useCallback, useEffect } from 'react'
+import { LogBox } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import PushNotification from 'react-native-push-notification'
 import Toast from 'react-native-toast-message'
@@ -21,6 +22,14 @@ const queryClient = new QueryClient({
 		},
 	},
 })
+
+// Ignore specific log warnings by message
+LogBox.ignoreLogs([
+	'Warning: ...', // replace 'Warning: ...' with the start of the warning message you want to ignore
+  ]);
+  
+  // Optionally, ignore all log warnings
+  LogBox.ignoreAllLogs(true);
 
 SplashScreen.preventAutoHideAsync()
 

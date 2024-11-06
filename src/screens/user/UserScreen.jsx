@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { ActivityIndicator, Button, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import Header from '../../components/Header'
 import Profile from '../../components/Profile'
 import { colors } from '../../constants/tokens'
@@ -18,7 +18,6 @@ export default function UserScreen() {
 	return (
 		<View style={defaultStyles.container}>
 			<Header title="Cá nhân" />
-			<Button title="Tải Bài Hát" onPress={handleDownload} />
 			<Profile navigation={navigation} user={user} />
 		</View>
 	)

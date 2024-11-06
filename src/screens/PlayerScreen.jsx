@@ -7,7 +7,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-toast-message';
 import { useActiveTrack } from 'react-native-track-player';
 import { addSongToPlaylist } from '../api/apiPlaylist';
 import FavoriteButton from '../components/FavoriteButton';
@@ -169,7 +168,7 @@ export default function PlayerScreen() {
 
 	// Shorten the artist names for display if too long
 	const displayArtistNames =
-		artistNamess.length > 30 ? `${artistNamess.substring(0, 30)}...` : artistNamess
+		artistNamess?.length > 30 ? `${artistNamess.substring(0, 30)}...` : artistNamess
 
 	return (
 		<View style={{ flex: 1 }}>
