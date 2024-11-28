@@ -17,7 +17,7 @@ export default function FavoriteScreen() {
 	const songsLength = useRef(0)
 
 	const handleTrackSelect = async (selectedTrack) => {
-			
+		setActiveTab('favorite')
 		const filterSongs = favoriteSongs.map((song) => song.Song)
 		const trackIndex = filterSongs.findIndex((track) => track.url === selectedTrack.url)
 

@@ -250,8 +250,6 @@
 import * as FileSystem from 'expo-file-system';
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, PermissionsAndroid, Platform, Text, View } from 'react-native';
-import Toast from 'react-native-toast-message';
-import TrackPlayer from 'react-native-track-player';
 import { defaultStyles } from '../../styles';
 import { downloadEventEmitter } from '../../utils/eventEmitter';
 import DownloadListItem from './DownloadListItem'; // Import the item component
@@ -316,7 +314,7 @@ export default function DownloadedSongsList() {
     }
   };
 
-  
+
 
   useEffect(() => {
     requestToPermissions();
@@ -350,7 +348,7 @@ export default function DownloadedSongsList() {
           <DownloadListItem track={item} onTrackSelect={() => handleTrackSelect(index)} />
         )}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingTop: 10, paddingBottom: 60 }}
+        contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
       />
     </View>
   );

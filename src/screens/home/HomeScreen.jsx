@@ -9,9 +9,10 @@ import useUser from '../../services/auth/useUser'
 import useHome from '../../services/home/useHome'
 import { defaultStyles } from '../../styles'
 import HomeTabPlaylist from './HomeTabPlaylist'
+import NewRelease from './NewRelease'
 
 export default function HomeScreen() {
-	const { isLoading: isLoadingHome, banners, playlists } = useHome()
+	const { isLoading: isLoadingHome, banners, playlists, newreleases } = useHome()
 	const { isLoading: isLoadingUser } = useUser()
 
 	const navigation = useNavigation() // Access navigation object
@@ -29,6 +30,7 @@ export default function HomeScreen() {
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<BannerList navigation={navigation} banners={banners} />
 				<HomeTabPlaylist navigation={navigation} playlists={playlists} />
+				<NewRelease navigation={navigation} newreleases={newreleases} />
 			</ScrollView>
 		</View>
 	)

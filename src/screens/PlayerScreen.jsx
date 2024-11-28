@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
@@ -6,10 +7,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-
 import Toast from 'react-native-toast-message';
 import { useActiveTrack } from 'react-native-track-player';
+import { addSongToPlaylist } from '../api/apiPlaylist';
 import FavoriteButton from '../components/FavoriteButton';
+import FavoritePlaylistModal from '../components/FavoritePlaylistModal';
 import Heading from '../components/Heading';
 import { MovingText } from '../components/MovingText';
 import { PlayerControls } from '../components/PlayerControls';
@@ -20,20 +22,18 @@ import { getStringData } from '../hooks/useAsyncStorage';
 import { usePlayerBackground } from '../hooks/usePlayerBackground';
 import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite';
 import useDetailPlaylist from '../services/home/useDetailPlaylist';
+import { sendDownloadSuccessNotification } from '../services/notificationService';
+import { useQueue } from '../store/queue';
 import { defaultStyles } from '../styles';
+import { downloadEventEmitter } from '../utils/eventEmitter';
 const safeToString = (value) => (value ? value.toString() : '')
 
 export default function PlayerScreen() {
 	const [isModalVisible, setModalVisible] = useState(false) // Modal visibility state
+	const [isModalVisibleArtist, setModalVisibleArtist] = useState(false) // Modal visibility state
+
+
 	const navigation = useNavigation() // Hook for navigation
-	const activeTrack = useActiveTrack();
-	console.log(activeTrack);
-
-	const [playlistsId, setPlaylistsId] = useState(null);
-	const [loading, setLoading] = useState(true);
-
-	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId);
-	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri);
 	const {
 		isFavorite,
 		isLoading: isLoadingFavorite,
@@ -41,7 +41,14 @@ export default function PlayerScreen() {
 		toggleFavorite,
 		isLoadingRemove,
 	} = useTrackPlayerFavorite();
+	const activeTrack = useActiveTrack()
+	const { activeQueueId } = useQueue()
+	const [playlistsId, setPlaylistsId] = useState(null) // State to store playlistsId
+	const [loading, setLoading] = useState(true) // State to handle loading
+	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId);
+	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri);
 
+	// Fetch playlistsId asynchronously
 	useEffect(() => {
 		// Fetch playlist ID asynchronously
 		const fetchPlaylistsId = async () => {
@@ -57,6 +64,22 @@ export default function PlayerScreen() {
 
 		fetchPlaylistsId();
 	}, []);
+
+	const openModal = () => {
+		setModalVisible(true)
+	}
+
+	const closeModal = () => {
+		setModalVisible(false)
+	}
+
+	// Handle add song to playlist function
+	const handleAddSongToPlaylist = async (playlistId) => {
+		if (activeTrack) {
+			await addSongToPlaylist(activeTrack, playlistId)
+			closeModal()
+		}
+	}
 
 	const handleDownload = async () => {
 		try {
@@ -88,78 +111,25 @@ export default function PlayerScreen() {
 			console.log("Metadata saved:", metadata);
 
 			// Emit the event to refresh the downloaded songs list
-			// downloadEventEmitter.emit('downloadComplete');
+			downloadEventEmitter.emit('downloadComplete');
+			sendDownloadSuccessNotification(activeTrack.title);
 
-			Toast.show({
-				type: 'success',
-				text1: 'Download Complete',
-				text2: 'Track and metadata saved successfully!',
-			});
 		} catch (error) {
 			console.error('Error downloading:', error);
-			Toast.show({
-				type: 'error',
-				text1: 'Download Error',
-				text2: 'An error occurred while downloading the track or metadata.',
+			// Toast.show({
+			// 	type: 'error',
+			// 	text1: 'Download Error',
+			// 	text2: 'An error occurred while downloading the track or metadata.',
+			// });
+			PushNotification.localNotification({
+				channelId: "download-channel", // Đảm bảo channel này đã được tạo
+				title: "Lỗi tải xuống",
+				message: "Đã xảy ra lỗi khi tải bài hát. Vui lòng thử lại.",
 			});
 		}
 	};
-	// const requestStoragePermission = async () => {
-	// 	if (Platform.OS === 'android') {
-	// 		try {
-	// 			const granted = await PermissionsAndroid.request(
-	// 				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-	// 				{
-	// 					title: 'Storage Permission',
-	// 					message: 'App needs access to your storage to save files.',
-	// 					buttonPositive: 'OK',
-	// 				}
-	// 			);
-	// 			return granted === PermissionsAndroid.RESULTS.GRANTED;
-	// 		} catch (err) {
-	// 			console.warn(err);
-	// 			return false;
-	// 		}
-	// 	}
-	// 	return true;
-	// };
-	// const handleDownload = async (track) => {
-	// 	try {
-	// 		// Ensure external storage permissions are granted
-	// 		await requestStoragePermission();
+	console.log("activeTrack", activeTrack);
 
-	// 		const audioDownloadUri = `${FileSystem.dirs.DownloadDir}/${track.title}.mp3`;
-	// 		const imageDownloadUri = `${FileSystem.dirs.DownloadDir}/${track.title}.jpg`;
-
-	// 		// Download audio file to public storage
-	// 		const audioDownloadResumable = FileSystem.createDownloadResumable(
-	// 			track.audioUrl,
-	// 			audioDownloadUri
-	// 		);
-	// 		await audioDownloadResumable.downloadAsync();
-
-	// 		// Download thumbnail image to public storage
-	// 		const imageDownloadResumable = FileSystem.createDownloadResumable(
-	// 			track.thumbnailUri || unknownTrackImageUri,
-	// 			imageDownloadUri
-	// 		);
-	// 		await imageDownloadResumable.downloadAsync();
-
-	// 		console.log("Audio and image downloaded to:", audioDownloadUri, imageDownloadUri);
-	// 		Toast.show({
-	// 			type: 'success',
-	// 			text1: 'Download Complete',
-	// 			text2: `Track saved to ${audioDownloadUri}`,
-	// 		});
-	// 	} catch (error) {
-	// 		console.error('Error downloading:', error);
-	// 		Toast.show({
-	// 			type: 'error',
-	// 			text1: 'Download Error',
-	// 			text2: 'An error occurred while downloading the track or metadata.',
-	// 		});
-	// 	}
-	// };
 
 	if (loading || isLoadingPlaylist || !activeTrack) {
 		return (
@@ -173,7 +143,7 @@ export default function PlayerScreen() {
 	const handleArtistClick = () => {
 		// Check if there is more than one artist
 		if (activeTrack.artists.length > 1) {
-			setModalVisible(true) // Show the modal for multiple artists
+			setModalVisibleArtist(true) // Show the modal for multiple artists
 		} else if (activeTrack.artists.length === 1) {
 			// If there's only one artist, navigate directly
 			navigateToArtistProfile(activeTrack.artists[0].link)
@@ -195,8 +165,7 @@ export default function PlayerScreen() {
 	}
 	const artistNamess = activeTrack?.artists
 		? activeTrack.artists.map((artist) => safeToString(artist.name)).join(', ')
-		: 'Nghệ sĩ chưa được cập nhật'
-	console.log("artistNamess", activeTrack.artistsNames);
+		: activeTrack.artistsNames
 
 	// Shorten the artist names for display if too long
 	const displayArtistNames =
@@ -239,69 +208,81 @@ export default function PlayerScreen() {
 											style={styles.trackTitleText}
 										/>
 									</View>
+
 									{isLoadingAdd || isLoadingRemove ? (
 										<ActivityIndicator />
 									) : (
 										<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
 									)}
-								</View>
-								{isLoadingAdd || isLoadingRemove ? (
-									<ActivityIndicator />
-								) : (
-									<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
-								)}
-								<TouchableOpacity onPress={() => handleDownload()} style={styles.downloadButton}>
-									<FontAwesome name="download" size={24} color={colors.icon} />
-								</TouchableOpacity>
-							</View>
-							{/* Artist names with click handler */}
-							<TouchableOpacity onPress={handleArtistClick}>
-								<Text style={[styles.trackArtistText, { marginTop: 6 }]}>
-									{displayArtistNames}
-								</Text>
-							</TouchableOpacity>
+									<TouchableOpacity onPress={() => handleDownload()} style={styles.downloadButton}>
+										<FontAwesome name="download" size={24} color={colors.icon} />
+									</TouchableOpacity>
 
-							{/* Modal to display multiple artists */}
-							<Modal
-								isVisible={isModalVisible}
-								onSwipeComplete={() => setModalVisible(false)} // Close modal when swiped down
-								swipeDirection="down" // Allow swipe down gesture
-								style={styles.modalContainer} // Align modal at the bottom
-								onBackdropPress={() => setModalVisible(false)}
-								backdropOpacity={0.3} // Dim the background
-							>
-								<View style={styles.modalContent}>
-									<Text style={styles.modalTitle}>Nghệ sĩ</Text>
-									<FlatList
-										data={activeTrack.artists}
-										keyExtractor={(item) => item.id}
-										renderItem={({ item }) => (
-											<TouchableOpacity
-												style={styles.artistContainer}
-												onPress={() => {
-													navigateToArtistProfile(item.link)
-													setModalVisible(false)
-												}}
-											>
-												<Image source={{ uri: item.thumbnailM }} style={styles.artistImage} />
-												<View style={styles.artistInfo}>
-													<Text style={styles.artistName}>{item.name}</Text>
-													<Text style={styles.artistFollowers}>quan tâm</Text>
-												</View>
-											</TouchableOpacity>
-										)}
-									/>
+									<TouchableOpacity onPress={openModal}>
+										<MaterialCommunityIcons name="music-note-plus" size={24} color={colors.icon} />
+									</TouchableOpacity>
+
 								</View>
-							</Modal>
+
+								{activeTrack.artistsNames && (
+									<TouchableOpacity onPress={handleArtistClick}>
+										<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
+											{displayArtistNames}
+										</Text>
+									</TouchableOpacity>
+								)}
+
+
+							</View>
 							<PlayerControls style={{ marginTop: 40 }} playlists={playlists} />
 							<PlayerProgressBar activeTrack={activeTrack} style={{ marginTop: 40 }} />
 						</View>
 					</View>
+
 				</View>
 
+				<FavoritePlaylistModal
+					visible={isModalVisible}
+					onClose={closeModal}
+					playlists={playlists}
+					onAddSongToPlaylist={handleAddSongToPlaylist}
+				/>
+				{/* Modal to display multiple artists */}
+				<Modal
+					isVisible={isModalVisibleArtist}
+					onSwipeComplete={() => setModalVisibleArtist(false)} // Close modal when swiped down
+					swipeDirection="down" // Allow swipe down gesture
+					style={styles.modalContainer} // Align modal at the bottom
+					onBackdropPress={() => setModalVisibleArtist(false)}
+					backdropOpacity={0.3} // Dim the background
+				>
+					<View style={styles.modalContent}>
+						<Text style={styles.modalTitle}>Nghệ sĩ</Text>
+						<FlatList
+							data={activeTrack.artists}
+							keyExtractor={(item) => item.id}
+							renderItem={({ item }) => (
+								<TouchableOpacity
+									style={styles.artistContainer}
+									onPress={() => {
+										navigateToArtistProfile(item.link)
+										setModalVisibleArtist(false)
+									}}
+								>
+									<Image source={{ uri: item.thumbnailM }} style={styles.artistImage} />
+									<View style={styles.artistInfo}>
+										<Text style={styles.artistName}>{item.name}</Text>
+										<Text style={styles.artistFollowers}>quan tâm</Text>
+									</View>
+								</TouchableOpacity>
+							)}
+						/>
+					</View>
+				</Modal>
 			</LinearGradient >
-		</View>
-	);
+
+		</View >
+	)
 }
 
 const styles = StyleSheet.create({
@@ -387,220 +368,4 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 });
-// import { FontAwesome } from '@expo/vector-icons';
-// import { Image } from 'expo-image';
-// import { LinearGradient } from 'expo-linear-gradient';
-// import React, { useEffect, useState } from 'react';
-// import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-// import RNFS from 'react-native-fs';
-// import Toast from 'react-native-toast-message';
-// import { useActiveTrack } from 'react-native-track-player';
-// import FavoriteButton from '../components/FavoriteButton';
-// import Heading from '../components/Heading';
-// import { MovingText } from '../components/MovingText';
-// import { PlayerControls } from '../components/PlayerControls';
-// import { PlayerProgressBar } from '../components/PlayerProgressbar';
-// import { unknownTrackImageUri } from '../constants/images';
-// import { colors, fontSize, screenPadding } from '../constants/tokens';
-// import { getStringData } from '../hooks/useAsyncStorage';
-// import { usePlayerBackground } from '../hooks/usePlayerBackground';
-// import { useTrackPlayerFavorite } from '../hooks/useTrackPlayerFavorite';
-// import useDetailPlaylist from '../services/home/useDetailPlaylist';
-// import { defaultStyles } from '../styles';
-
-// export default function PlayerScreen() {
-// 	const activeTrack = useActiveTrack();
-// 	const [playlistsId, setPlaylistsId] = useState(null);
-// 	const [loading, setLoading] = useState(true);
-// 	console.log('activeTrack', activeTrack);
-
-// 	const { playlists, isLoadingPlaylist } = useDetailPlaylist(playlistsId);
-// 	const { bgImgColors } = usePlayerBackground(activeTrack?.thumbnailM ?? unknownTrackImageUri);
-// 	const {
-// 		isFavorite,
-// 		isLoading: isLoadingFavorite,
-// 		isLoadingAdd,
-// 		toggleFavorite,
-// 		isLoadingRemove,
-// 	} = useTrackPlayerFavorite();
-
-// 	useEffect(() => {
-// 		const fetchPlaylistsId = async () => {
-// 			try {
-// 				const id = await getStringData('playlistId');
-// 				setPlaylistsId(id);
-// 			} catch (error) {
-// 				console.error('Error fetching playlist ID:', error);
-// 			} finally {
-// 				setLoading(false);
-// 			}
-// 		};
-
-// 		fetchPlaylistsId();
-// 	}, []);
-
-// 	const handleDownload = async (track) => {
-// 		try {
-// 			// Ensure external storage permissions are granted
-// 			if (Platform.OS === 'android') {
-// 				const granted = await PermissionsAndroid.request(
-// 					PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-// 					{
-// 						title: 'Storage Permission',
-// 						message: 'App needs access to your storage to download files.',
-// 						buttonNeutral: 'Ask Me Later',
-// 						buttonNegative: 'Cancel',
-// 						buttonPositive: 'OK',
-// 					}
-// 				);
-// 				if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-// 					Toast.show({
-// 						type: 'error',
-// 						text1: 'Permission Denied',
-// 						text2: 'Storage permission is required to download files.',
-// 					});
-// 					return;
-// 				}
-// 			}
-
-// 			const audioDownloadUri = `${RNFS.DownloadDirectoryPath}/${track.title}.mp3`;
-// 			const imageDownloadUri = `${RNFS.DownloadDirectoryPath}/${track.title}.jpg`;
-
-// 			// Download audio file to public storage
-// 			await RNFS.downloadFile({
-// 				fromUrl: track.audioUrl,
-// 				toFile: audioDownloadUri,
-// 			}).promise;
-
-// 			// Download thumbnail image to public storage
-// 			await RNFS.downloadFile({
-// 				fromUrl: track.thumbnailUri || unknownTrackImageUri,
-// 				toFile: imageDownloadUri,
-// 			}).promise;
-
-// 			console.log("Audio and image downloaded to:", audioDownloadUri, imageDownloadUri);
-// 			Toast.show({
-// 				type: 'success',
-// 				text1: 'Download Complete',
-// 				text2: `Track saved to ${audioDownloadUri}`,
-// 			});
-// 		} catch (error) {
-// 			console.error('Error downloading:', error);
-// 			Toast.show({
-// 				type: 'error',
-// 				text1: 'Download Error',
-// 				text2: 'An error occurred while downloading the track or metadata.',
-// 			});
-// 		}
-// 	};
-
-// 	if (loading || isLoadingPlaylist || !activeTrack) {
-// 		return (
-// 			<View style={[defaultStyles.container, { justifyContent: 'center' }]}>
-// 				<ActivityIndicator color={colors.icon} />
-// 			</View>
-// 		);
-// 	}
-
-// 	return (
-// 		<LinearGradient
-// 			style={{ flex: 1 }}
-// 			colors={
-// 				bgImgColors
-// 					? [bgImgColors?.dominant, bgImgColors?.lightVibrant]
-// 					: [colors.background, colors.primary]
-// 			}
-// 		>
-// 			<View style={styles.overlayContainer}>
-// 				<Heading title="Trình phát nhạc" />
-// 				<View style={styles.artworkImageContainer}>
-// 					<Image
-// 						style={{ ...styles.artworkImage }}
-// 						source={activeTrack.thumbnailM}
-// 						placeholder={unknownTrackImageUri}
-// 						contentFit="cover"
-// 					/>
-// 				</View>
-// 				<View style={{ flex: 1 }}>
-// 					<View style={{ marginVertical: 'auto' }}>
-// 						<View style={{ height: 60 }}>
-// 							<View
-// 								style={{
-// 									flexDirection: 'row',
-// 									justifyContent: 'space-between',
-// 									alignItems: 'center',
-// 								}}
-// 							>
-// 								<View style={styles.trackTitleContainer}>
-// 									<MovingText
-// 										text={activeTrack.title ?? ''}
-// 										animationThreshold={30}
-// 										style={styles.trackTitleText}
-// 									/>
-// 								</View>
-// 								{isLoadingAdd || isLoadingRemove ? (
-// 									<ActivityIndicator />
-// 								) : (
-// 									<FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
-// 								)}
-// 								<TouchableOpacity onPress={() => handleDownload(activeTrack)} style={styles.downloadButton}>
-// 									<FontAwesome name="download" size={24} color={colors.icon} />
-// 								</TouchableOpacity>
-// 							</View>
-// 							{activeTrack.artistsNames && (
-// 								<Text numberOfLines={1} style={[styles.trackArtistText, { marginTop: 6 }]}>
-// 									{activeTrack.artistsNames}
-// 								</Text>
-// 							)}
-// 						</View>
-// 						<PlayerControls style={{ marginTop: 40 }} playlists={playlists} />
-// 						<PlayerProgressBar activeTrack={activeTrack} style={{ marginTop: 40 }} />
-// 					</View>
-// 				</View>
-// 			</View>
-// 		</LinearGradient>
-// 	);
-// }
-
-// const styles = StyleSheet.create({
-// 	overlayContainer: {
-// 		...defaultStyles.container,
-// 		paddingHorizontal: screenPadding.horizontal,
-// 		backgroundColor: 'rgba(0,0,0,0.5)',
-// 	},
-// 	artworkImageContainer: {
-// 		shadowOffset: {
-// 			width: 0,
-// 			height: 8,
-// 		},
-// 		shadowOpacity: 0.44,
-// 		shadowRadius: 11.0,
-// 		flexDirection: 'row',
-// 		justifyContent: 'center',
-// 		alignItems: 'center',
-// 		height: '45%',
-// 		marginTop: 30,
-// 	},
-// 	artworkImage: {
-// 		width: '90%',
-// 		height: '100%',
-// 		resizeMode: 'cover',
-// 		borderRadius: 12,
-// 	},
-// 	trackTitleContainer: {
-// 		flex: 1,
-// 		overflow: 'hidden',
-// 	},
-// 	trackTitleText: {
-// 		...defaultStyles.text,
-// 		fontSize: 22,
-// 		fontWeight: '700',
-// 	},
-// 	trackArtistText: {
-// 		...defaultStyles.text,
-// 		fontSize: fontSize.base,
-// 		opacity: 0.8,
-// 		maxWidth: '90%',
-// 	},
-// });
 

@@ -7,6 +7,7 @@ import { Platform, StyleSheet, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { FloatingPlayer } from './src/components/FloatingPlayer'
 import { colors, fontSize } from './src/constants/tokens'
+import DownloadScreen from './src/screens/download/DownloadScreen'
 import FavoriteStack from './src/screens/favorite/FavoriteStack'
 import HomeStack from './src/screens/home/HomeStack'
 import LoginScreen from './src/screens/LoginScreen'
@@ -90,6 +91,17 @@ function BottomTabs() {
 						tabBarLabel: 'Yêu thích',
 						headerShown: false,
 						tabBarIcon: ({ color }) => <Ionicons name="heart" size={24} color={color} />,
+					}}
+				/>
+				<Tab.Screen
+					name="download"
+					component={DownloadScreen}
+					options={{
+						tabBarLabel: 'Download',
+						headerShown: false,
+						tabBarIcon: ({ color }) => (
+							<MaterialCommunityIcons name="playlist-play" size={28} color={color} />
+						),
 					}}
 				/>
 				<Tab.Screen

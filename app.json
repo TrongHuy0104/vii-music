@@ -30,6 +30,7 @@
         "backgroundColor": "#151521"
       },
       "package": "com.music.player",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE",
@@ -49,7 +50,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "749a0af9-2bba-431a-8234-90f1c85fee41"
+        "projectId": "97385e7c-6adb-4d81-b9b1-c200a1f43702"
       }
     }
   }
